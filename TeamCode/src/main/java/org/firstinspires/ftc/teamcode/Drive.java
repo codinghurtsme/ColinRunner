@@ -57,6 +57,13 @@ public class Drive {
         return currentY;
     }
 
+    public static void setPower(Drive drive, double p){
+        drive.frontRightMotor.setPower(p);
+        drive.frontLeftMotor.setPower(p);
+        drive.backRightMotor.setPower(p);
+        drive.backLeftMotor.setPower(p);
+    }
+
     public static void lineToX(Drive drive,double position){
         drive.localizer.update();
         Pose2d pose = drive.localizer.getPose();

@@ -17,11 +17,9 @@ public class MecunumMath {
     }
 
     public static double getVelocity(Drive drive) throws InterruptedException {
-        ElapsedTime time = new ElapsedTime();
         drive.localizer.update();
-        time.startTime();
         Pose2d pose = drive.localizer.getPose();
-        time.wait(10);
+        Thread.sleep(10);
         drive.localizer.update();
         Pose2d poseSecond = drive.localizer.getPose();
         double distanceTraveled = Math.sqrt((Math.pow((pose.position.x - poseSecond.position.x), 2)) + Math.pow((pose.position.y - poseSecond.position.y), 2));
@@ -30,10 +28,8 @@ public class MecunumMath {
     }
 
     public static double getAcceleration(Drive drive) throws InterruptedException {
-        ElapsedTime time = new ElapsedTime();
-        time.startTime();
         double velocity = getVelocity(drive);
-        time.wait(10);
+        Thread.sleep(100);
         double velocitySecond = getVelocity(drive);
         double acceleration = (velocitySecond - velocity) / .01;
         return acceleration;

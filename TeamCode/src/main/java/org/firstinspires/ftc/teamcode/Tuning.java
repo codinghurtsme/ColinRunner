@@ -16,17 +16,18 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Tuning {
-
-    public static double kStatic(Drive drive){
-        MecunumMath mm = new MecunumMath(5,5,5);
-        Pose2d initialPose = drive.localizer.getPose();
-        double xPose = initialPose.position.x;
-        double kStatic = 0;
+    public static double kStatic(Drive drive, MecunumMath math) throws InterruptedException {
+        double power = 0;
         double velocity = 0;
-        ElapsedTime time = new ElapsedTime();
-        while(velocity<.05){
-
+        int iterations = 0;
+        while(velocity<.05 && iterations<100){
+            Thread.sleep(100);
+            Drive.setPower(drive, power);
+            velocity = math.getVelocity(drive);
+            power+=.01;
+            iterations++;
         }
-        return kStatic;
+        Drive.setPower(drive,0);
+        return power;
     }
 }
