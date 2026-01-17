@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 import androidx.annotation.NonNull;
 
-
-
 // Non-RR imports
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,28 +13,31 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class Tuning {
-    public static double kStatic(Drive drive) throws InterruptedException {
+public class Tuning extends LinearOpMode {
+    Pose2d i = new Pose2d(0,0,0);
+
+    Drive drive = new Drive(hardwareMap,i);
+    public double kStatic() throws InterruptedException {
         double power = 0;
         double velocity = 0;
         int iterations = 0;
         while(velocity<.05 && iterations<100){
             Thread.sleep(100);
-            Drive.setPower(drive, power);
-            velocity = drive.getVelocity(drive);
+            drive.setPower(power);
+            velocity = drive.getVelocity();
             power+=.01;
             iterations++;
         }
-        Drive.setPower(drive,0);
+        drive.setPower(0);
         return power;
     }
 
-    public static double kVelocity(Drive drive) throws InterruptedException {
+    public double kVelocity() throws InterruptedException {
         double kVSum = 0;
         int iterations = 0;
         for(double power = .02; power + Drive.PARAMS.kStatic<=1; power+=.02){
-           Drive.setPower(drive, power+ Drive.PARAMS.kStatic);
-           double velocity = Drive.getVelocity(drive);
+           drive.setPower(power+ Drive.PARAMS.kStatic);
+           double velocity = drive.getVelocity();
            if(velocity<=0) continue;
            double kV = power/velocity;
            kVSum +=kV;
@@ -44,30 +45,36 @@ public class Tuning {
         }
         return (kVSum/iterations);
     }
-    public static double maxVelocity(Drive drive) throws InterruptedException {
+    public double maxVelocity() throws InterruptedException {
         double sum = 0;
         for(int i = 0; i<=3; i++){
-            Drive.setPower(drive, 1.0);
+            drive.setPower(1.0);
             Thread.sleep(500);
-            double velocity = Drive.getVelocity(drive);
+            double velocity = drive.getVelocity();
             sum+=velocity;
-            Drive.setPower(drive,0);
+            drive.setPower(0);
             Thread.sleep(1000);
         }
         return sum/4;
     }
-    public static double maxAcceleration(Drive drive) throws InterruptedException {
+    public double maxAcceleration() throws InterruptedException {
         double sum = 0;
         for(int i = 0; i<=3; i++){
-            Drive.setPower(drive, 1.0);
+            drive.setPower( 1.0);
             Thread.sleep(200);
-            double acceleration = Drive.getAcceleration(drive);
+            double acceleration = drive.getAcceleration();
             sum+=acceleration;
-            Drive.setPower(drive,0);
+            drive.setPower(0);
             Thread.sleep(1000);
         }
         return sum/4;
     }
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+        if(gamepad1.aWasPressed()){
+
+        }
+    }
 }
 

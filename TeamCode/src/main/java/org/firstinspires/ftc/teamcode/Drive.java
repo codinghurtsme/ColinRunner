@@ -54,29 +54,29 @@ public class Drive {
 
     }
 
-    public static double updateX(Drive drive){
-        drive.localizer.update();
-        Pose2d pose = drive.localizer.getPose();
+    public double updateX(){
+        localizer.update();
+        Pose2d pose = localizer.getPose();
         double currentX = pose.position.x;
         return currentX;
     }
-    public static double updateY(Drive drive){
-        drive.localizer.update();
-        Pose2d pose = drive.localizer.getPose();
+    public double updateY(){
+        localizer.update();
+        Pose2d pose = localizer.getPose();
         double currentY = pose.position.y;
         return currentY;
     }
-    public static double getVelocity(Drive drive) throws InterruptedException {
-        drive.localizer.update();
-        Pose2d pose1 = drive.localizer.getPose();
+    public double getVelocity() throws InterruptedException {
+        localizer.update();
+        Pose2d pose1 = localizer.getPose();
 
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
         Thread.sleep(20); // sample window
 
-        drive.localizer.update();
-        Pose2d pose2 = drive.localizer.getPose();
+        localizer.update();
+        Pose2d pose2 = localizer.getPose();
 
         double dx = pose2.position.x - pose1.position.x;
         double dy = pose2.position.y - pose1.position.y;
@@ -88,15 +88,15 @@ public class Drive {
         return distance / dt;
     }
 
-    public static double getAcceleration(Drive drive) throws InterruptedException {
-        double v1 = getVelocity(drive);
+    public double getAcceleration() throws InterruptedException {
+        double v1 = getVelocity();
 
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
         Thread.sleep(40); // time between velocity samples
 
-        double v2 = getVelocity(drive);
+        double v2 = getVelocity();
 
         double dt = timer.seconds();
         if (dt <= 0) return 0;
@@ -104,11 +104,11 @@ public class Drive {
         return (v2 - v1) / dt;
     }
 
-    public static void setPower(Drive drive, double p){
-        drive.frontRightMotor.setPower(p);
-        drive.frontLeftMotor.setPower(p);
-        drive.backRightMotor.setPower(p);
-        drive.backLeftMotor.setPower(p);
+    public void setPower(double p){
+        frontRightMotor.setPower(p);
+        frontLeftMotor.setPower(p);
+        backRightMotor.setPower(p);
+        backLeftMotor.setPower(p);
     }
 
 
