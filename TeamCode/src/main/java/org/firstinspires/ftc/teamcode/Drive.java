@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
-
-import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+//import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -15,7 +15,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 public class Drive {
-    public Localizer localizer;
+    public HardwareMap hardwareMap;
+
+    public Pose2d pose;
+
+    public  GoBildaPinpointDriver pinpoint;
     public DcMotor frontLeftMotor;
     public DcMotor frontRightMotor;
     public DcMotor backLeftMotor;
@@ -29,9 +33,8 @@ public class Drive {
     public static double maxV = 0;
     public static double ticksPerInch = 0;
 
-
     }
-    public Drive (HardwareMap hardwareMap, Pose2d pose){
+    public Drive (HardwareMap hardwareMap){
         // TODO: make sure your config has motors with these names (or change them)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
          frontLeftMotor = hardwareMap.dcMotor.get("frontLeftMotor");
@@ -50,40 +53,48 @@ public class Drive {
 
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.htm
-        localizer = new PinpointLocalizer(hardwareMap, PARAMS.ticksPerInch, pose);
+        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
+        this.hardwareMap = hardwareMap;
+        pose = new Pose2d(0,0,0,hardwareMap);
     }
 
     public double updateX(){
-        localizer.update();
-        Pose2d pose = localizer.getPose();
-        double currentX = pose.position.x;
+        pinpoint.update();
+        pose.getPose();
+        double currentX = pose.x;
         return currentX;
     }
     public double updateY(){
-        localizer.update();
-        Pose2d pose = localizer.getPose();
-        double currentY = pose.position.y;
+        pinpoint.update();
+        pose.getPose();
+        double currentY = pose.y;
         return currentY;
     }
 
+    public void setPose(double x, double y, double heading){
+        pose.setPose(x,y,heading);
+    }
+
     public Pose2d getPose(){
-        return localizer.getPose();
+        pose.getPose();
+        return pose;
     }
     public double getVelocity() throws InterruptedException {
-        localizer.update();
-        Pose2d pose1 = localizer.getPose();
+        pinpoint.update();
+        pose.getPose();
 
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
 
         Thread.sleep(20); // sample window
 
-        localizer.update();
-        Pose2d pose2 = localizer.getPose();
+        pinpoint.update();
+        Pose2d pose2 = new Pose2d(hardwareMap);
+        pose2.getPose();
 
-        double dx = pose2.position.x - pose1.position.x;
-        double dy = pose2.position.y - pose1.position.y;
+        double dx = pose2.x - pose.x;
+        double dy = pose2.y - pose.y;
         double distance = Math.sqrt((Math.pow(dx,2)+ Math.pow(dy,2)));
 
         double dt = timer.seconds();
@@ -115,5 +126,58 @@ public class Drive {
         backLeftMotor.setPower(p);
     }
 
+    public class Tuning{
+        public double kStatic() throws InterruptedException {
+            double power = 0;
+            double velocity = 0;
+            int iterations = 0;
+            while(velocity<.05 && iterations<100){
+                Thread.sleep(100);
+                setPower(power);
+                velocity = getVelocity();
+                power+=.01;
+                iterations++;
+            }
+            setPower(0);
+            return power;
+        }
 
+        public double kVelocity() throws InterruptedException {
+            double kVSum = 0;
+            int iterations = 0;
+            for(double power = .02; power + Drive.PARAMS.kStatic<=1; power+=.02){
+                setPower(power+ Drive.PARAMS.kStatic);
+                double velocity = getVelocity();
+                if(velocity<=0) continue;
+                double kV = power/velocity;
+                kVSum +=kV;
+                iterations++;
+            }
+            return (kVSum/iterations);
+        }
+        public double maxVelocity() throws InterruptedException {
+            double sum = 0;
+            for(int i = 0; i<=3; i++){
+                setPower(1.0);
+                Thread.sleep(500);
+                double velocity = getVelocity();
+                sum+=velocity;
+                setPower(0);
+                Thread.sleep(1000);
+            }
+            return sum/4;
+        }
+        public double maxAcceleration() throws InterruptedException {
+            double sum = 0;
+            for(int i = 0; i<=3; i++){
+                setPower( 1.0);
+                Thread.sleep(200);
+                double acceleration = getAcceleration();
+                sum+=acceleration;
+                setPower(0);
+                Thread.sleep(1000);
+            }
+            return sum/4;
+        }
+    }
 }
