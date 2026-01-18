@@ -66,6 +66,10 @@ public class Drive {
         double currentY = pose.position.y;
         return currentY;
     }
+
+    public Pose2d getPose(){
+        return localizer.getPose();
+    }
     public double getVelocity() throws InterruptedException {
         localizer.update();
         Pose2d pose1 = localizer.getPose();

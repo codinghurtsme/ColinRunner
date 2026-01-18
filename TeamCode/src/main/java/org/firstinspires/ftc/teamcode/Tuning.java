@@ -14,9 +14,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Tuning extends LinearOpMode {
-    Pose2d i = new Pose2d(0,0,0);
+    Pose2d pose = new Pose2d(0,0,0);
 
-    Drive drive = new Drive(hardwareMap,i);
+    Drive drive = new Drive(hardwareMap,pose);
+
+
     public double kStatic() throws InterruptedException {
         double power = 0;
         double velocity = 0;
@@ -72,8 +74,38 @@ public class Tuning extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        if(gamepad1.aWasPressed()){
 
+        Pose2d startingPose = drive.getPose();
+
+        int selectedTuningMode = 1;
+        String mode = "kStatic";
+        if(gamepad1.aWasPressed()) selectedTuningMode++;
+        if(selectedTuningMode==6) selectedTuningMode = 1;
+
+        if(selectedTuningMode==1) mode = "kStatic";
+        if(selectedTuningMode==2) mode = "kVelocity";
+        if(selectedTuningMode==3) mode = "maxVelocity";
+        if(selectedTuningMode==4) mode = "maxAcceleration";
+        if(selectedTuningMode==5) mode = "ticksPerInch";
+
+        telemetry.addData("Current Tuning Mode: ",mode);
+        telemetry.update();
+
+
+        waitForStart();
+
+        if(isStopRequested()) return;
+
+        while(opModeIsActive()){
+            if(mode.equals("ticksPerInch")){
+                telemetry.addLine("Push Robot Striaght");
+                double dx= drive.updateX()-startingPose.position.x;
+                double dy= drive.updateY()-startingPose.position.y;
+                telemetry.addData("Ticks Traveled",Math.hypot(dx,dy));
+                telemetry.addLine("Ticks per inch = Ticks Traveled / distance traveled");
+            }
+
+            telemetry.update();
         }
     }
 }
