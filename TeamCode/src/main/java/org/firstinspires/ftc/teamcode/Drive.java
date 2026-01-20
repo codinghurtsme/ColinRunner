@@ -19,11 +19,11 @@ public class Drive {
 
     public Pose2d pose;
 
-    public  GoBildaPinpointDriver pinpoint;
-    public DcMotor frontLeftMotor;
-    public DcMotor frontRightMotor;
-    public DcMotor backLeftMotor;
-    public DcMotor backRightMotor;
+    private final GoBildaPinpointDriver pinpoint;
+    private final DcMotor frontLeftMotor;
+    private final DcMotor frontRightMotor;
+    private final DcMotor backLeftMotor;
+    private final DcMotor backRightMotor;
 
     public static class PARAMS {
     public static double kStatic = 0;
@@ -31,7 +31,7 @@ public class Drive {
     public static double kA = 0;
     public static double maxA = 0;
     public static double maxV = 0;
-    public static double ticksPerInch = 0;
+    public static double driveOffset = 0;
 
     }
     public Drive (HardwareMap hardwareMap){
