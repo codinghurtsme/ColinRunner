@@ -72,6 +72,11 @@ public class Drive {
         return currentY;
     }
 
+    public void updateAxis() {
+        updateX();
+        updateY();
+    }
+
     public void setPose(double x, double y, double heading){
         pose.setPose(x,y,heading);
     }

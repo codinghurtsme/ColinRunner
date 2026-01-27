@@ -16,21 +16,51 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Tuning extends LinearOpMode {
 
+    public enum TUNINGMODES {
+        KSTATIC(1),
+        KVELOCITY(2),
+        MAXVELOCITY(3),
+        MAXACCELERATION(4),
+        DISTANCETUNING(5);
+
+        private final int value;
+
+        private TUNINGMODES(int value) {this.value = value;}
+
+        public int getVal() {return value;}
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
         Drive drive = new Drive(hardwareMap);
         Pose2d startingPose = drive.getPose();
 
         int selectedTuningMode = 1;
-        String mode = "kStatic";
+        TUNINGMODES mode = TUNINGMODES.KSTATIC;
         if(gamepad1.triangleWasPressed()) selectedTuningMode++;
         if(selectedTuningMode==6) selectedTuningMode = 1;
 
-        if(selectedTuningMode==1) mode = "kStatic";
-        if(selectedTuningMode==2) mode = "kVelocity";
-        if(selectedTuningMode==3) mode = "maxVelocity";
-        if(selectedTuningMode==4) mode = "maxAcceleration";
-        if(selectedTuningMode==5) mode = "distanceTuning";
+        switch (selectedTuningMode) {
+            default: {
+                selectedTuningMode = 1;
+            }
+            case 1: {
+                mode = TUNINGMODES.KSTATIC;
+            } break;
+            case 2: {
+                mode = TUNINGMODES.KVELOCITY;
+            } break;
+            case 3: {
+                mode = TUNINGMODES.MAXVELOCITY;
+            } break;
+            case 4: {
+                mode = TUNINGMODES.MAXACCELERATION;
+            } break;
+            case 5: {
+                mode = TUNINGMODES.DISTANCETUNING;
+            } break;
+
+        }
 
         telemetry.addData("Current Tuning Mode: ",mode);
         telemetry.update();
@@ -41,7 +71,7 @@ public class Tuning extends LinearOpMode {
         if(isStopRequested()) return;
 
         while(opModeIsActive()){
-            if(mode.equals("distanceTuning")){
+            if(mode.getVal() == 5){
                 telemetry.addLine("Push Robot Straight");
                 double dx = drive.updateX()-startingPose.x;
                 double dy = drive.updateY()-startingPose.y;
