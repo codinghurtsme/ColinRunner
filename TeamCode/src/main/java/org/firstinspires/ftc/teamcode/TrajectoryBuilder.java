@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
-public class TrajectoryBuilder {
+
+public class TrajectoryBuilder extends ActionBuilder {
     private Pose2d pose;
     private Drive drive;
 
@@ -11,7 +12,14 @@ public class TrajectoryBuilder {
     public void updatePose(Pose2d pose){
         this.pose = pose;
     }
-    public void lineToX(double distance){
+    public class lineToX extends ActionBuilder.Actions {
+        private double pos;
+        public lineToX(double pos){
+            this.pos = pos;
+        }
+        public boolean run(){
+            return true;
+        }
 
     }
     public void lineToY(double distance){
@@ -24,8 +32,8 @@ public class TrajectoryBuilder {
 
     }
 
-    public void createTrajectory(){
-
+    public boolean timeUpdate(){
+        return true;
     }
 
 

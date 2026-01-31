@@ -190,4 +190,7 @@ public class Drive {
             return sum/4;
         }
     }
+    public class FeedForwardEquations{
+
+    }
 }

@@ -20,8 +20,10 @@ public class DeleteAfterUse extends LinearOpMode {
 
 
         SequentialAction sequentialAction = new SequentialAction();
+        TrajectoryBuilder tab1 = new ActionBuilder();
+        sequentialAction.addToStack(lineToX(10));
 
-        sequentialAction.runBlocking();
+        ActionBuilder.runBlocking(sequentialAction);
 
     }
 

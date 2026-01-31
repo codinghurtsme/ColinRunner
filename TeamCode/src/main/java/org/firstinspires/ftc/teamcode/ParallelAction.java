@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ParallelAction extends Actions{
-    private static final List<actions> objects = new ArrayList<>();
+public class ParallelAction extends ActionBuilder{
+    private static final List<Actions> objects = new ArrayList<>();
 
-    public void addToStack(actions...obj){
+    public void addToStack(Actions...obj){
         objects.addAll(Arrays.asList(obj));
     }
 
     @Override
     public boolean timeUpdate(){
         for(int i =0; i < objects.size(); i++){
-            actions obj = objects.get(i);
+            Actions obj = objects.get(i);
            if(obj.run()){
                objects.remove(i);
                i--;

@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SequentialAction extends Actions{
+public class SequentialAction extends ActionBuilder{
 
-    public SequentialAction(actions...obj){
+    public SequentialAction(Actions...obj){
         objects.addAll(Arrays.asList(obj));    }
 
-    private static final List<actions> objects = new ArrayList<>();
+    private static final List<Actions> objects = new ArrayList<>();
 
-    public void addToStack(actions...obj){
+    public void addToStack(Actions...obj){
         objects.addAll(Arrays.asList(obj));
     }
 
@@ -21,7 +21,7 @@ public class SequentialAction extends Actions{
         int index = 0;
         if (index >= size) return true;
 
-        actions obj = objects.get(index);
+        Actions obj = objects.get(index);
 
         if (obj.run()) {
             index++;
