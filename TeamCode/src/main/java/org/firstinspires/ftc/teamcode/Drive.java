@@ -59,6 +59,11 @@ public class Drive {
         pose = new Pose2d(0,0,0,hardwareMap);
     }
 
+    public Drive(HardwareMap hardwareMap, Pose2d pos) {
+        this(hardwareMap);
+        this.pose = pos;
+    }
+
     public double updateX(){
         pinpoint.update();
         pose.getPose();
