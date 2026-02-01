@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Actions {
+public abstract class ActionBuilder {
     abstract boolean timeUpdate();
     static ElapsedTime timer = new ElapsedTime();
-    abstract public static class actions{
+    abstract protected static class Actions{
 
         protected boolean isRun;
 
@@ -18,21 +18,21 @@ public abstract class Actions {
     }
 
 
-private static final List<Actions> objects = new ArrayList<>();
+private static final List<ActionBuilder> objects = new ArrayList<>();
 
-    public void addToStack(Actions...obj) {
+    public void addToStack(ActionBuilder...obj) {
         objects.addAll(Arrays.asList(obj));
 
     }
     private static int index = 0;
 
-    public void runBlocking(Actions...objs) {
+    public static void runBlocking(ActionBuilder...objs) {
         objects.addAll(Arrays.asList(objs));
         int size = objects.size();
 
         if (index >= size) return;
 
-        Actions obj = objects.get(index);
+        ActionBuilder obj = objects.get(index);
 
         if (obj.timeUpdate()) {
             index++;

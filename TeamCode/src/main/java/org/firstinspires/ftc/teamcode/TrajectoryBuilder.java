@@ -1,34 +1,25 @@
 package org.firstinspires.ftc.teamcode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class TrajectoryBuilder {
+public class TrajectoryBuilder extends ActionBuilder {
     private Pose2d pose;
     private Drive drive;
-
-    private List<Actions.actions> actions =  new ArrayList<Actions.actions>();
 
     public TrajectoryBuilder(Pose2d pose, Drive drive){
         this.pose=pose;
         this.drive = drive;
     }
-
-    public TrajectoryBuilder(Pose2d pose, Drive drive, Actions.actions actions) {
-        this(pose,drive);
-
-        this.actions.addAll(Arrays.asList(actions));
-    }
-
-    public List<Actions.actions> getActions() {
-        return this.actions;
-    }
-
     public void updatePose(Pose2d pose){
         this.pose = pose;
     }
-    public void lineToX(double distance){
+    public class lineToX extends ActionBuilder.Actions {
+        private double pos;
+        public lineToX(double pos){
+            this.pos = pos;
+        }
+        public boolean run(){
+            return true;
+        }
 
     }
     public void lineToY(double distance){
@@ -41,11 +32,9 @@ public class TrajectoryBuilder {
 
     }
 
-    public void createTrajectory(Actions.actions ... actions){
-        this.actions.addAll(Arrays.asList(actions));
+    public boolean timeUpdate(){
+        return true;
     }
-
-
 
 
 }

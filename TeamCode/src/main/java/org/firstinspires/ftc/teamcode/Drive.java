@@ -190,17 +190,7 @@ public class Drive {
             return sum/4;
         }
     }
+    public class FeedForwardEquations{
 
-    public class lineToX extends Actions.actions {
-
-        @Override
-        boolean run() {
-
-            return false;
-        }
     }
-
-    public Actions.actions lineToX() {return new lineToX();}
-
-
 }

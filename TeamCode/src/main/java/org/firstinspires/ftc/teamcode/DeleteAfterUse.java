@@ -21,11 +21,14 @@ public class DeleteAfterUse extends LinearOpMode {
         TrajectoryBuilder traj = new TrajectoryBuilder(drive.pose, drive);
 
 
+        SequentialAction sequentialAction = new SequentialAction();
+        TrajectoryBuilder tab1 = new ActionBuilder();
+        sequentialAction.addToStack(lineToX(10));
         SequentialAction sequentialAction = new SequentialAction(
                 traj
         );
 
-        sequentialAction.runBlocking();
+        ActionBuilder.runBlocking(sequentialAction);
 
     }
 
