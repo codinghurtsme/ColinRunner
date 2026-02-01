@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import java.util.Objects;
+
 @Autonomous
 public class DeleteAfterUse extends LinearOpMode {
 
@@ -19,7 +21,9 @@ public class DeleteAfterUse extends LinearOpMode {
         TrajectoryBuilder traj = new TrajectoryBuilder(drive.pose, drive);
 
 
-        SequentialAction sequentialAction = new SequentialAction();
+        SequentialAction sequentialAction = new SequentialAction(
+                traj
+        );
 
         sequentialAction.runBlocking();
 
