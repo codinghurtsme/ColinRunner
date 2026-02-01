@@ -31,7 +31,7 @@ public class Pose2d {
         pinpoint.update();
         this.x = pinpoint.getPosX(DistanceUnit.INCH);
         this.y = pinpoint.getPosY(DistanceUnit.INCH);
-        this.heading = pinpoint.getHeading(AngleUnit.RADIANS);
+        this.heading = pinpoint.getHeading(AngleUnit.DEGREES);
     }
     public void setPose(double x, double y, double heading){
         this.x = x;

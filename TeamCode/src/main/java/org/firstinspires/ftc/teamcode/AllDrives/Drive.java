@@ -19,12 +19,17 @@ public class Drive {
     private final DcMotor backRightMotor;
 
     public static class PARAMS {
-    public static double kStatic = 0;
-    public static double kV = 0;
-    public static double kA = 0;
-    public static double maxA = 0;
-    public static double maxV = 0;
-    public static double driveOffset = 0;
+        public static double kStatic = 0;
+        public static double kV = 0;
+        public static double kA = 0;
+        public static double maxA = 1;
+         public static double maxV = 0;
+        public static double driveOffset = 0;
+        public static double latGains = 0;
+        public static double headingGains = 0;
+        public static double axialGains = 0;
+        public static double timeToAccelerate = maxV/maxA;
+
 
     }
     public Drive (HardwareMap hardwareMap){
@@ -183,7 +188,5 @@ public class Drive {
             return sum/4;
         }
     }
-    public class FeedForwardEquations{
 
-    }
 }
