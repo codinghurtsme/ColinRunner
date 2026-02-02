@@ -29,6 +29,8 @@ public class Drive {
         public static double headingGains = 0;
         public static double axialGains = 0;
         public static double timeToAccelerate = maxV/maxA;
+        final double maxPower = 1/maxV;
+
 
 
     }

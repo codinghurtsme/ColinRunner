@@ -7,7 +7,8 @@ import org.firstinspires.ftc.teamcode.AllDrives.FeedForwardEquations;
 import org.firstinspires.ftc.teamcode.AllDrives.Pose2d;
 import org.firstinspires.ftc.teamcode.Exceptions.TangentialPath;
 import org.firstinspires.ftc.teamcode.Exceptions.ZeroDistancePath;
-import
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.List;
 public class TrajectoryBuilder extends ActionBuilder {
     private Pose2d pose;
     private final Drive drive;
-    private static final ElapsedTime timer = new ElapsedTime();
 
     private List<Actions> actions = new ArrayList<Actions>();
     public TrajectoryBuilder(Pose2d pose, Drive drive){
@@ -45,7 +45,11 @@ public class TrajectoryBuilder extends ActionBuilder {
         this.pose = pose;
     }
     public class lineToX extends ActionBuilder.Actions {
+
         private double pos;
+        private double pastVelocity;
+        private final ElapsedTime timer = new ElapsedTime();
+        private final FeedForwardEquations feed = new FeedForwardEquations(drive);
         public lineToX(double pos){
             this.pos = pos;
             if(pos == pose.x) throw new ZeroDistancePath();
@@ -53,8 +57,38 @@ public class TrajectoryBuilder extends ActionBuilder {
         }
         double[] times = FeedForwardEquations.getTimesX(pose,pos);
         public boolean run(){
-
-            return true;
+            if(timer.seconds()>=times[2]){
+                drive.setPower(0);
+                return true;
+            }
+            else if(timer.seconds()<times[0]){
+                double acceleration = Drive.PARAMS.maxA;
+                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
+                pastVelocity = velocity;
+                double power = velocity/ Drive.PARAMS.maxV;
+                if(power>1)power=1;
+                drive.setPower(power);
+                return false;
+            }
+            else if(timer.seconds()>=times[0]&&timer.seconds()<times[1]){
+                drive.setPower(1);
+                return false;
+            }
+            else if(timer.seconds()>=times[1]&&timer.seconds()<times[2]){
+                double acceleration = Drive.PARAMS.maxA;
+                pastVelocity = Drive.PARAMS.maxV;
+                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
+                pastVelocity = velocity;
+                double power = velocity/ Drive.PARAMS.maxV;
+                if(power>1)power=1;
+                if(power<0)power=0;
+                drive.setPower(power);
+                return false;
+            }
+            else{
+                drive.setPower(1);
+                return false;
+            }
         }
 
     }
