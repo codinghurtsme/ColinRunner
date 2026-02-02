@@ -1,15 +1,37 @@
 package org.firstinspires.ftc.teamcode.AllDrives;
 
+
+
 public class FeedForwardEquations {
     private final Drive drive;
+    private static final double maxA = Drive.PARAMS.maxA;
+    private static final double timeToAccelerate = Drive.PARAMS.timeToAccelerate;
+
     public FeedForwardEquations(Drive drive){
         this.drive = drive;
     }
-    public static int[] getTimesX(Pose2d pose, double pos){
-        if(pos-pose.x==Drive.PARAMS.timeToAccelerate)
-        if(pos-pose.x<Drive.PARAMS.timeToAccelerate){
-            //work in maybe progress
+    public static double[] getTimesX(Pose2d pose, double pos){
+        double distanceNeeded = Math.abs(pose.x-pos);
+        if(pos-pose.x==Drive.PARAMS.timeToAccelerate){}
+        if(pos-pose.x<Drive.PARAMS.timeToAccelerate){}
+        //work in maybe progress hopefully
+        else{
+            double distanceAfterAccelerate = distanceNeeded-distanceTraveled(timeToAccelerate);
+            double distanceToCruise = distanceAfterAccelerate-distanceTraveled(timeToAccelerate);
+            double middleTime = timeTraveled(distanceToCruise)+timeToAccelerate;
+            double[] times = {timeToAccelerate, middleTime, timeToAccelerate+middleTime};
+            return times;
         }
-       return new int[]{1, 2, 3};
+        return new double[]{1, 2, 3};
+    }
+
+    private static double distanceTraveled(double time){
+        double distanceTraveled = (.5*(Math.pow(time,3)))*maxA;
+        return distanceTraveled;
+    }
+    private static double timeTraveled(double distance){
+        double time = Math.sqrt((2*distance)/maxA);
+        return time;
     }
 }
+

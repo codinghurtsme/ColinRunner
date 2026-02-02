@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.AllActions;
 
 
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AllDrives.Drive;
 import org.firstinspires.ftc.teamcode.AllDrives.FeedForwardEquations;
 import org.firstinspires.ftc.teamcode.AllDrives.Pose2d;
 import org.firstinspires.ftc.teamcode.Exceptions.TangentialPath;
 import org.firstinspires.ftc.teamcode.Exceptions.ZeroDistancePath;
-
+import
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +51,7 @@ public class TrajectoryBuilder extends ActionBuilder {
             if(pos == pose.x) throw new ZeroDistancePath();
             if((pose.heading<=91&&pose.heading>=89)||(pose.heading<=271&&pose.heading>=269)) throw new TangentialPath("x","lineToY");
         }
-        int[] times = FeedForwardEquations.getTimesX(pose,pos);
+        double[] times = FeedForwardEquations.getTimesX(pose,pos);
         public boolean run(){
 
             return true;
