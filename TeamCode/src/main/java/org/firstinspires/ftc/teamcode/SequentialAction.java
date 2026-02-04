@@ -7,9 +7,6 @@ import java.util.Objects;
 
 public class SequentialAction extends ActionBuilder{
 
-
-    // TODO rename Actions and actions to proper types
-
     public SequentialAction(Object... object) {
 
         for(Object obj: object) {
@@ -18,12 +15,6 @@ public class SequentialAction extends ActionBuilder{
             else if(obj instanceof TrajectoryBuilder) {
                 objects.addAll(((TrajectoryBuilder) obj).getActions());
             }
-            // I am not completely sure what I did but I think it works ... probably ... maybe ... maybe not ... probably not
-            // Why did I do this
-            // Colin, don't ask what I did or how it works. I don't know.
-            // Moral of the story : Screw around till something works
-            // it is supposed to take any time of action, either trajectory builder or actions
-
         }
 
 
