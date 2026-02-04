@@ -11,7 +11,7 @@ public abstract class ActionBuilder {
     static ElapsedTime timer = new ElapsedTime();
     abstract protected static class Actions{
 
-        protected boolean isRun;
+        protected boolean initialized;
 
         abstract boolean run();
 

@@ -48,6 +48,7 @@ public class TrajectoryBuilder extends ActionBuilder {
 
         private double pos;
         private double pastVelocity;
+        private boolean initialized;
         private final ElapsedTime timer = new ElapsedTime();
         private final FeedForwardEquations feed = new FeedForwardEquations(drive);
         public lineToX(double pos){
@@ -57,6 +58,7 @@ public class TrajectoryBuilder extends ActionBuilder {
         }
         double[] times = FeedForwardEquations.getTimesX(pose,pos);
         public boolean run(){
+            if(!initialized)initialized=true;timer.reset();
             if(timer.seconds()>=times[2]){
                 drive.setPower(0);
                 return true;
