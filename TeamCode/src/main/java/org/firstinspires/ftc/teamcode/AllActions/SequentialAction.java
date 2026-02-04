@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AllActions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-public class SequentialAction extends ActionBuilder{
+public class SequentialAction extends ActionBuilder {
 
     public SequentialAction(Object... object) {
 

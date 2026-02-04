@@ -1,17 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AllDrives;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 //import com.acmerobotics.roadrunner.Pose2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-
-
 
 
 public class Drive {
@@ -26,12 +19,19 @@ public class Drive {
     private final DcMotor backRightMotor;
 
     public static class PARAMS {
-    public static double kStatic = 0;
-    public static double kV = 0;
-    public static double kA = 0;
-    public static double maxA = 0;
-    public static double maxV = 0;
-    public static double driveOffset = 0;
+        public static double kStatic = 0;
+        public static double kV = 0;
+        public static double kA = 0;
+        public static double maxA = 1;
+         public static double maxV = 0;
+        public static double driveOffset = 0;
+        public static double latGains = 0;
+        public static double headingGains = 0;
+        public static double axialGains = 0;
+        public static double timeToAccelerate = maxV/maxA;
+        final double maxPower = 1/maxV;
+
+
 
     }
     public Drive (HardwareMap hardwareMap){
@@ -190,7 +190,5 @@ public class Drive {
             return sum/4;
         }
     }
-    public class FeedForwardEquations{
 
-    }
 }

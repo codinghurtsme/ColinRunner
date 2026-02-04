@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.AllActions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ParallelAction extends ActionBuilder{
+public class ParallelAction extends ActionBuilder {
     private static final List<Actions> objects = new ArrayList<>();
 
     public ParallelAction(Object... object) {
