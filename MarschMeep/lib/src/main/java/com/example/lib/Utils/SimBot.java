@@ -36,14 +36,17 @@ public class SimBot {
         double half = sizeIn / 2.0;
 
         // body
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         g2.setColor(Color.RED);
         g2.fill(new Rectangle.Double(-half, -half, sizeIn, sizeIn));
 
         // heading marker forward
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
         g2.setColor(Color.RED);
         g2.setStroke(new BasicStroke((float)(0.5))); // stroke in inches (scaled by transform)
         g2.draw(new java.awt.geom.Line2D.Double(0, 0, half, 0));
 
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         g2.setTransform(old);
     }
 

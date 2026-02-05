@@ -1,6 +1,10 @@
 package com.example.lib.Utils;
 
 
+import com.example.lib.TrajectoryManager.Path;
+import com.example.lib.TrajectoryManager.SimAction;
+import com.sun.jdi.ArrayReference;
+
 import org.w3c.dom.css.Rect;
 
 import javax.swing.*;
@@ -30,14 +34,15 @@ public class PathFrame {
     private FPos clickPoint;
     private ArrayList<Point2D.Double> path = new ArrayList<>();
 
-
+    private ArrayList<Path> totalPaths = new ArrayList<>();
 
     public PathFrame() {
         frame = new JFrame();
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
-        frame.setBackground(Color.BLACK);
+        frame.setUndecorated(true);
+        frame.setBackground(new Color(0.f, 0.f, 0.f, 0.75f));
         frame.setLayout(new BorderLayout());
 
 
@@ -62,6 +67,10 @@ public class PathFrame {
 
 
         frame.setVisible(true);
+    }
+
+    public void addPath(Path p) {
+        this.totalPaths.add(p);
     }
 
     private JPanel createControlPanel() {
@@ -154,17 +163,11 @@ public class PathFrame {
         private double animT = 0.0;
 
         private final ArrayList<RectangleObstacle> obstacles = new ArrayList<>();
-        private final ArrayList<Point2D.Double> path = new ArrayList<>();
+        private ArrayList<Point2D.Double> path = new ArrayList<>();
 
 
         public FieldPanel()
         {
-            path.add(new Point2D.Double(20, 20));
-            path.add(new Point2D.Double(40, 40));
-            path.add(new Point2D.Double(80, 60));
-            path.add(new Point2D.Double(120, 100));
-
-
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -240,6 +243,16 @@ public class PathFrame {
         }
 
         public void animateAlongPathInches() {
+
+            Path currentPath = totalPaths.get(0);
+            totalPaths.remove(0);
+
+            path = new ArrayList<>();
+
+            for(FPos a: currentPath.getActions()) {
+                path.add(new Point2D.Double(a.getX(), a.getY()));
+            }
+
             if (path.size() < 2) return;
             if (animTimer != null && animTimer.isRunning()) return;
 

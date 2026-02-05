@@ -4,29 +4,31 @@ import com.example.lib.Utils.FPos;
 import com.example.lib.Utils.Utilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimAction {
 
-    abstract protected static class Action {
+    public abstract static class Action {
         FPos initPos;
         FPos endPos;
 
         FPos getInitPos() {return initPos;}
         FPos getEndPos() {return  endPos;}
 
-        abstract ArrayList<FPos> getPoints();
+        abstract List<FPos> getPoints();
 
     }
 
-    public class lineToX extends Action{
+    public static class lineToX extends Action{
 
-        public lineToX(FPos initPos, FPos endPos) {
-            this.endPos = endPos;
+        public lineToX(FPos initPos, double X) {
             this.initPos = initPos;
+
+            this.endPos.setX(X);
         }
 
         @Override
-        ArrayList<FPos> getPoints() {
+        List<FPos> getPoints() {
 
             double distance = Utilities.getDistance(initPos, endPos);
 
@@ -41,4 +43,6 @@ public class SimAction {
             return posList;
         }
     }
+
+    public static Action lineToX(FPos currentPos, double X) {return new lineToX(currentPos, X);}
 }
