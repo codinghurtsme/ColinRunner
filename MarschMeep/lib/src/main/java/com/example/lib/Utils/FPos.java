@@ -12,6 +12,10 @@ public class FPos {
         this.heading = heading;
     }
 
+    public FPos(FPos pos) {
+        this(pos.getX(), pos.getY(), pos.getHeading());
+    }
+
     public double getX() {return this.x;}
     public double getY() {return this.y;}
     public double getHeading() {return this.heading;}
@@ -32,5 +36,9 @@ public class FPos {
         info += y;
 
         return info;
+    }
+    public boolean equals(FPos o) {
+        boolean isEqual = o.getX() == this.getX() && o.getY() == this.getY() && o.getHeading() == this.getHeading();
+        return isEqual;
     }
 }

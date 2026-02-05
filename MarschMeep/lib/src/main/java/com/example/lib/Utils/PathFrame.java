@@ -171,7 +171,7 @@ public class PathFrame {
                     try {
                         Point2D world = FieldTransform.screenToWorld(e.getX(), e.getY());
                         System.out.println("Clicked At: " + world.getX() + ", " + world.getY());
-                        clickPoint = new FPos(world.getX(), world.getY(), 0);
+                        clickPoint = new FPos(world.getX() -72, world.getY() - 72, 0);
                         log.append("Mouse Clicked At " + clickPoint + "\n");
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -188,7 +188,7 @@ public class PathFrame {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
-            g2.setColor(new Color(0x10, 0x12, 0x14)); // very dark gray
+            g2.setColor(new Color(0x10, 0x12, 0x14));
             g2.fillRect(0, 0, getWidth(), getHeight());
 
             FieldTransform.update(getWidth(), getHeight());
