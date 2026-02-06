@@ -25,6 +25,16 @@ public class SimBot {
         this.xIn = xIn; this.yIn = yIn; this.angle = angleRad;
     }
 
+    public void setPose(FPos pos) {
+        this.xIn = pos.getX();
+        this.yIn = pos.getY();
+        this.angle = pos.getHeading();
+    }
+
+    public FPos getPos() {
+        return new FPos(xIn, yIn, angle);
+    }
+
     // Draw using Graphics2D where 1 unit == 1 inch
     public void drawInches(Graphics2D g2) {
         AffineTransform old = g2.getTransform();

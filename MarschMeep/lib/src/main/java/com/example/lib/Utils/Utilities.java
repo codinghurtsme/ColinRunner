@@ -14,4 +14,9 @@ public class Utilities {
 
         return d;
     }
+
+    public static float lerp(float initVal, float endVal, float interpolationVal) {
+        return (initVal + interpolationVal * (endVal - initVal));
+    }
+
 }

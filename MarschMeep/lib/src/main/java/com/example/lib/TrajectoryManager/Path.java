@@ -5,26 +5,23 @@ import com.example.lib.Utils.FPos;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Path {
-    private List<FPos> actions;
+    private List<SimAction.Action> actions;
 
-    public Path() {actions = new ArrayList<FPos>();}
+    public Path() {actions = new ArrayList<SimAction.Action>();}
     public Path(SimAction.Action... commands) {
 
-        actions = new ArrayList<FPos>();
+        actions = new ArrayList<SimAction.Action>();
 
-        for(SimAction.Action act: commands) {
-            actions.addAll(act.getPoints());
-        }
+        actions.addAll(Arrays.asList(commands));
     }
 
     public void addToPath(SimAction.Action... commands) {
-        for(SimAction.Action obj: commands) {
-            actions.addAll(obj.getPoints());
-        }
+        actions.addAll(Arrays.asList(commands));
     }
 
-    public List<FPos> getActions() {return actions;}
+    public List<SimAction.Action> getActions() {return actions;}
 }

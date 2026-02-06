@@ -32,6 +32,7 @@ public class PathFrame {
     private JTextArea log;
 
     private FPos clickPoint;
+    private FPos rInitPos;
     private ArrayList<Point2D.Double> path = new ArrayList<>();
 
     private ArrayList<Path> totalPaths = new ArrayList<>();
@@ -42,7 +43,7 @@ public class PathFrame {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
         frame.setUndecorated(true);
-        frame.setBackground(new Color(0.f, 0.f, 0.f, 0.75f));
+        frame.setBackground(Color.DARK_GRAY);
         frame.setLayout(new BorderLayout());
 
 
@@ -83,11 +84,11 @@ public class PathFrame {
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
         top.setOpaque(false);
 
-        JButton addObstacle = styledButton("Add Obstacle");
+        JButton resetBot = styledButton("Reset Bot");
         JButton animate = styledButton("Animate");
         JButton clear = styledButton("Clear");
 
-        top.add(addObstacle);
+        top.add(resetBot);
         top.add(animate);
         top.add(clear);
         p.add(top, BorderLayout.NORTH);
@@ -106,9 +107,9 @@ public class PathFrame {
 
         // Wire actions
 
-        addObstacle.addActionListener(e -> { fieldPanel.addRandomObstacleInches(); log.append("Added obstacle\n"); });
-        animate.addActionListener(e -> { fieldPanel.animateAlongPathInches(); log.append("Animating\n"); });
-        clear.addActionListener(e -> { fieldPanel.clearObstacles(); log.append("Cleared\n"); });
+        resetBot.addActionListener(e -> { fieldPanel.resetBot(); log.append("Reset Bot\n"); });
+        animate.addActionListener(e -> { fieldPanel.animateBot(); log.append("Animating\n"); });
+        clear.addActionListener(e -> { fieldPanel.clearLog(); log.append("Cleared\n"); });
 
 
         return p;
@@ -122,6 +123,7 @@ public class PathFrame {
         b.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
         b.setOpaque(true);
         b.setFont(b.getFont().deriveFont(Font.PLAIN, 14f));
+        b.setFont(Font.getFont(Font.SANS_SERIF));
         return b;
     }
 
@@ -129,6 +131,7 @@ public class PathFrame {
 
     public void addBot(int size, int width, int height, FPos pos) {
         robot = new SimBot(size, width, height, pos);
+        this.rInitPos = pos;
     }
 
     public void drawField(Graphics2D g2, int fx, int fy, int fsize) {
@@ -164,6 +167,7 @@ public class PathFrame {
 
         private final ArrayList<RectangleObstacle> obstacles = new ArrayList<>();
         private ArrayList<Point2D.Double> path = new ArrayList<>();
+        Path currentPath;
 
 
         public FieldPanel()
@@ -219,6 +223,11 @@ public class PathFrame {
                 robot.drawInches(g2);
             }
 
+            if(currentPath != null) {
+                drawPath(g2, currentPath);
+            }
+
+
             g2.setTransform(old);
             g2.dispose();
 
@@ -230,57 +239,99 @@ public class PathFrame {
             gBorder.dispose();
         }
 
-        public void addRandomObstacleInches() {
-            double x = 10 + Math.random() * 120;
-            double y = 10 + Math.random() * 120;
-            obstacles.add(new RectangleObstacle(x, y, 12, 12));
+        public void resetBot() {
+            robot.setPose(rInitPos);
             repaint();
         }
 
-        public void clearObstacles() {
-            obstacles.clear();
+        public void clearLog() {
+            log.setText("");
             repaint();
         }
 
-        public void animateAlongPathInches() {
+//        public void animateAlongPathInches() {
+//
+//            Path currentPath = totalPaths.get(0);
+//            totalPaths.remove(0);
+//
+//            path = new ArrayList<>();
+//
+//            for(FPos a: currentPath.getActions()) {
+//                path.add(new Point2D.Double(a.getX(), a.getY()));
+//            }
+//
+//            if (path.size() < 2) return;
+//            if (animTimer != null && animTimer.isRunning()) return;
+//
+//            animIndex = 0;
+//            animT = 0.0;
+//            int fps = 60;
+//            int durationPerSegmentMs = 1000;
+//
+//            animTimer = new Timer(1000 / fps, e -> {
+//                Point2D.Double a = path.get(animIndex);
+//                Point2D.Double b = path.get(animIndex + 1);
+//                animT += 1.0 / (fps * (durationPerSegmentMs / 1000.0));
+//                if (animT > 1.0) {
+//                    animT = 0.0;
+//                    animIndex++;
+//                    if (animIndex >= path.size() - 1) {
+//                        ((Timer)e.getSource()).stop();
+//                        return;
+//                    }
+//                }
+//                double t = animT;
+//                double nx = a.x + t * (b.x - a.x);
+//                double ny = a.y + t * (b.y - a.y);
+//                double angle = Math.atan2(b.y - a.y, b.x - a.x);
+//                robot.setPose(nx, ny, angle);
+//                repaint();
+//            });
+//            animTimer.start();
+//        }
+        public void animateBot() {
+            if(totalPaths.isEmpty()) return;
+            currentPath = totalPaths.get(0);
 
-            Path currentPath = totalPaths.get(0);
             totalPaths.remove(0);
 
-            path = new ArrayList<>();
-
-            for(FPos a: currentPath.getActions()) {
-                path.add(new Point2D.Double(a.getX(), a.getY()));
-            }
-
-            if (path.size() < 2) return;
             if (animTimer != null && animTimer.isRunning()) return;
 
-            animIndex = 0;
-            animT = 0.0;
-            int fps = 60;
-            int durationPerSegmentMs = 1000;
+            for(SimAction.Action action: currentPath.getActions()) {
+                animIndex = 0;
+                animT = 0.0;
+                int fps = 60;
+                int durationPerSegmentMs = 1000;
 
-            animTimer = new Timer(1000 / fps, e -> {
-                Point2D.Double a = path.get(animIndex);
-                Point2D.Double b = path.get(animIndex + 1);
-                animT += 1.0 / (fps * (durationPerSegmentMs / 1000.0));
-                if (animT > 1.0) {
-                    animT = 0.0;
-                    animIndex++;
-                    if (animIndex >= path.size() - 1) {
-                        ((Timer)e.getSource()).stop();
-                        return;
+                animTimer =  new Timer(1000 / fps, e -> {
+                    FPos rPos = robot.getPos();
+
+                   FPos targetPos = action.getTargetPos();
+
+                    animT += 1.0 / (fps * (durationPerSegmentMs / 1000.0));
+                    if (animT > 1.0) {
+                        animT = 0.0;
+                        animIndex++;
+                        if (animIndex >= currentPath.getActions().size() - 1) {
+                            ((Timer)e.getSource()).stop();
+                            return;
+                        }
                     }
-                }
-                double t = animT;
-                double nx = a.x + t * (b.x - a.x);
-                double ny = a.y + t * (b.y - a.y);
-                double angle = Math.atan2(b.y - a.y, b.x - a.x);
-                robot.setPose(nx, ny, angle);
-                repaint();
-            });
-            animTimer.start();
+
+                    double t = animT;
+
+                    Point2D.Double a = new Point2D.Double(rPos.getX(), rPos.getY());
+                    float lerpedX = Utilities.lerp((float) rPos.getX(), (float) targetPos.getX(), 0.2f);
+                    float lerpedY = Utilities.lerp((float) rPos.getY(), (float) targetPos.getY(), 0.2f);
+                    Point2D.Double b = new Point2D.Double(lerpedX, lerpedY);
+                    double angle = Math.atan2(targetPos.getY() - a.y, targetPos.getX() - a.x);
+
+                    robot.setPose(b.x, b.y, angle);
+                    repaint();
+                });
+
+                animTimer.start();
+            }
         }
 
         private class RectangleObstacle {
@@ -313,6 +364,37 @@ public class PathFrame {
             Point2D.Double a = path.get(i);
             Point2D.Double b = path.get(i + 1);
             g2.draw(new Line2D.Double(a.x, a.y, b.x, b.y));
+        }
+    }
+
+    private void drawPath(Graphics2D g, Path path) {
+        FPos rPos = robot.getPos();
+
+        g.setColor(Color.YELLOW);
+        g.setStroke(new BasicStroke(0.5f));
+
+        Point2D.Double p1;
+        Point2D.Double p2;
+
+        for(SimAction.Action action: path.getActions()) {
+            FPos targetPos = action.getTargetPos();
+
+            p1 = new Point2D.Double(rPos.getX(), rPos.getY());
+            p2 = new Point2D.Double(targetPos.getX(), targetPos.getY());
+
+            if (action.getMarkers() != null) {
+                for(FPos marker: action.getMarkers()) {
+                    Point2D.Double tempPoint = new Point2D.Double(marker.getX(), marker.getY());
+
+                    g.draw(new Line2D.Double(p1.x, p1.y, tempPoint.getX(), tempPoint.getY()));
+
+                    p1 = tempPoint;
+                }
+            }
+
+            g.draw(new Line2D.Double(p1.x, p1.y, p2.x, p2.y));
+
+            rPos = targetPos;
         }
     }
 

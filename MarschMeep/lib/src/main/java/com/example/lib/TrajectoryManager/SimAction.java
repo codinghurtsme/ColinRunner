@@ -9,40 +9,25 @@ import java.util.List;
 public class SimAction {
 
     public abstract static class Action {
-        FPos initPos;
-        FPos endPos;
+        FPos targetPos;
+        public FPos getTargetPos() {return targetPos;}
 
-        FPos getInitPos() {return initPos;}
-        FPos getEndPos() {return  endPos;}
-
-        abstract List<FPos> getPoints();
-
+        abstract public List<FPos> getMarkers();
     }
 
     public static class lineToX extends Action{
 
-        public lineToX(FPos initPos, double X) {
-            this.initPos = initPos;
+        public lineToX(double X) {
+            targetPos = new FPos();
 
-            this.endPos.setX(X);
+            this.targetPos.setX(X + 72);
         }
 
         @Override
-        List<FPos> getPoints() {
-
-            double distance = Utilities.getDistance(initPos, endPos);
-
-            ArrayList<FPos> posList = new ArrayList<>();
-            FPos currentPos = new FPos(initPos);
-
-            while(!currentPos.equals(endPos)) {
-                posList.add(currentPos);
-                currentPos.setX(currentPos.getX() + 0.01);
-            }
-
-            return posList;
+        public List<FPos> getMarkers() {
+            return null;
         }
     }
 
-    public static Action lineToX(FPos currentPos, double X) {return new lineToX(currentPos, X);}
+    public static Action lineToX(double X) {return new lineToX(X);}
 }

@@ -12,6 +12,10 @@ public class FPos {
         this.heading = heading;
     }
 
+    public FPos() {
+        this(0,0,0);
+    }
+
     public FPos(FPos pos) {
         this(pos.getX(), pos.getY(), pos.getHeading());
     }
