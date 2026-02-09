@@ -50,11 +50,13 @@ public class TrajectoryBuilder extends ActionBuilder {
         private double pastVelocity;
         private boolean initialized;
         private final ElapsedTime timer = new ElapsedTime();
+        private final double direction;
         private final FeedForwardEquations feed = new FeedForwardEquations(drive);
         public lineToX(double pos){
             this.pos = pos;
             if(pos == pose.x) throw new ZeroDistancePath();
             if((pose.heading<=91&&pose.heading>=89)||(pose.heading<=271&&pose.heading>=269)) throw new TangentialPath("x","lineToY");
+            direction = Math.signum(pos-pose.x);
         }
         double[] times = FeedForwardEquations.getTimesX(pose,pos);
         public boolean run(){
@@ -69,11 +71,11 @@ public class TrajectoryBuilder extends ActionBuilder {
                 pastVelocity = velocity;
                 double power = velocity/ Drive.PARAMS.maxV;
                 if(power>1)power=1;
-                drive.setPower(power);
+                drive.setPower(power*direction);
                 return false;
             }
             else if(timer.seconds()>=times[0]&&timer.seconds()<times[1]){
-                drive.setPower(1);
+                drive.setPower(1*direction);
                 return false;
             }
             else if(timer.seconds()>=times[1]&&timer.seconds()<times[2]){
@@ -84,11 +86,11 @@ public class TrajectoryBuilder extends ActionBuilder {
                 double power = velocity/ Drive.PARAMS.maxV;
                 if(power>1)power=1;
                 if(power<0)power=0;
-                drive.setPower(power);
+                drive.setPower(power*direction);
                 return false;
             }
             else{
-                drive.setPower(1);
+                drive.setPower(1*direction);
                 return false;
             }
         }
@@ -97,13 +99,53 @@ public class TrajectoryBuilder extends ActionBuilder {
 
     public class lineToY extends ActionBuilder.Actions {
         private double pos;
+        private double pastVelocity;
+        private boolean initialized;
+        private final double direction;
+        private final ElapsedTime timer = new ElapsedTime();
         public lineToY(double pos){
             this.pos = pos;
             if(pos == pose.y) throw new ZeroDistancePath();
             if((pose.heading<=1&&pose.heading>=-1)||(pose.heading<=181&&pose.heading>=179)) throw new TangentialPath("x","lineToY");
+            direction = Math.signum(pos-pose.y);
         }
+
+        double[] times = FeedForwardEquations.getTimesY(pose,pos);
+
         public boolean run(){
-            return true;
+            if(!initialized)initialized=true;timer.reset();
+            if(timer.seconds()>=times[2]){
+                drive.setPower(0);
+                return true;
+            }
+            else if(timer.seconds()<times[0]){
+                double acceleration = Drive.PARAMS.maxA;
+                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
+                pastVelocity = velocity;
+                double power = velocity/ Drive.PARAMS.maxV;
+                if(power>1)power=1;
+                drive.setPower(power*direction);
+                return false;
+            }
+            else if(timer.seconds()>=times[0]&&timer.seconds()<times[1]){
+                drive.setPower(1*direction);
+                return false;
+            }
+            else if(timer.seconds()>=times[1]&&timer.seconds()<times[2]){
+                double acceleration = Drive.PARAMS.maxA;
+                pastVelocity = Drive.PARAMS.maxV;
+                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
+                pastVelocity = velocity;
+                double power = velocity/ Drive.PARAMS.maxV;
+                if(power>1)power=1;
+                if(power<0)power=0;
+                drive.setPower(power*direction);
+                return false;
+            }
+            else{
+                drive.setPower(1*direction);
+                return false;
+            }
         }
 
     }
