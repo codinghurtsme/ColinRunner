@@ -60,41 +60,66 @@ public class TrajectoryBuilder extends ActionBuilder {
         }
         double[] times = FeedForwardEquations.getTimesX(pose,pos);
         public boolean run(){
-            if(!initialized)initialized=true;timer.reset();
-            if(timer.seconds()>=times[2]){
-                drive.setPower(0);
-                return true;
+            if(times.length==3) {
+                if (!initialized) initialized = true;
+                timer.reset();
+                if (timer.seconds() >= times[2]) {
+                    drive.setPower(0);
+                    return true;
+                } else if (timer.seconds() < times[0]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    drive.setPower(power * direction);
+                    return false;
+                } else if (timer.seconds() >= times[0] && timer.seconds() < times[1]) {
+                    drive.setPower(1 * direction);
+                    return false;
+                } else if (timer.seconds() >= times[1] && timer.seconds() < times[2]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    pastVelocity = Drive.PARAMS.maxV;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    if (power < 0) power = 0;
+                    drive.setPower(power * direction);
+                    return false;
+                } else {
+                    return false;
+                }
             }
-            else if(timer.seconds()<times[0]){
-                double acceleration = Drive.PARAMS.maxA;
-                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
-                pastVelocity = velocity;
-                double power = velocity/ Drive.PARAMS.maxV;
-                if(power>1)power=1;
-                drive.setPower(power*direction);
-                return false;
-            }
-            else if(timer.seconds()>=times[0]&&timer.seconds()<times[1]){
-                drive.setPower(1*direction);
-                return false;
-            }
-            else if(timer.seconds()>=times[1]&&timer.seconds()<times[2]){
-                double acceleration = Drive.PARAMS.maxA;
-                pastVelocity = Drive.PARAMS.maxV;
-                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
-                pastVelocity = velocity;
-                double power = velocity/ Drive.PARAMS.maxV;
-                if(power>1)power=1;
-                if(power<0)power=0;
-                drive.setPower(power*direction);
-                return false;
-            }
-            else{
-                drive.setPower(1*direction);
-                return false;
+            else {
+                if (!initialized) initialized = true;
+                timer.reset();
+                if (timer.seconds() >= times[1]) {
+                    drive.setPower(0);
+                    return true;
+                } else if (timer.seconds() < times[0]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    drive.setPower(power * direction);
+                    return false;
+                } else if (timer.seconds() >= times[0] && timer.seconds() < times[1]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    pastVelocity = Drive.PARAMS.maxV;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    if (power < 0) power = 0;
+                    drive.setPower(power * direction);
+                    return false;
+                } else {
+                    return false;
+                }
             }
         }
-
     }
 
     public class lineToY extends ActionBuilder.Actions {
@@ -113,38 +138,64 @@ public class TrajectoryBuilder extends ActionBuilder {
         double[] times = FeedForwardEquations.getTimesY(pose,pos);
 
         public boolean run(){
-            if(!initialized)initialized=true;timer.reset();
-            if(timer.seconds()>=times[2]){
-                drive.setPower(0);
-                return true;
+            if(times.length==3) {
+                if (!initialized) initialized = true;
+                timer.reset();
+                if (timer.seconds() >= times[2]) {
+                    drive.setPower(0);
+                    return true;
+                } else if (timer.seconds() < times[0]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    drive.setPower(power * direction);
+                    return false;
+                } else if (timer.seconds() >= times[0] && timer.seconds() < times[1]) {
+                    drive.setPower(1 * direction);
+                    return false;
+                } else if (timer.seconds() >= times[1] && timer.seconds() < times[2]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    pastVelocity = Drive.PARAMS.maxV;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    if (power < 0) power = 0;
+                    drive.setPower(power * direction);
+                    return false;
+                } else {
+                    return false;
+                }
             }
-            else if(timer.seconds()<times[0]){
-                double acceleration = Drive.PARAMS.maxA;
-                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
-                pastVelocity = velocity;
-                double power = velocity/ Drive.PARAMS.maxV;
-                if(power>1)power=1;
-                drive.setPower(power*direction);
-                return false;
-            }
-            else if(timer.seconds()>=times[0]&&timer.seconds()<times[1]){
-                drive.setPower(1*direction);
-                return false;
-            }
-            else if(timer.seconds()>=times[1]&&timer.seconds()<times[2]){
-                double acceleration = Drive.PARAMS.maxA;
-                pastVelocity = Drive.PARAMS.maxV;
-                double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
-                pastVelocity = velocity;
-                double power = velocity/ Drive.PARAMS.maxV;
-                if(power>1)power=1;
-                if(power<0)power=0;
-                drive.setPower(power*direction);
-                return false;
-            }
-            else{
-                drive.setPower(1*direction);
-                return false;
+            else {
+                if (!initialized) initialized = true;
+                timer.reset();
+                if (timer.seconds() >= times[1]) {
+                    drive.setPower(0);
+                    return true;
+                } else if (timer.seconds() < times[0]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV + acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    drive.setPower(power * direction);
+                    return false;
+                } else if (timer.seconds() >= times[0] && timer.seconds() < times[1]) {
+                    double acceleration = Drive.PARAMS.maxA;
+                    pastVelocity = Drive.PARAMS.maxV;
+                    double velocity = Drive.PARAMS.kStatic + pastVelocity * Drive.PARAMS.kV - acceleration;
+                    pastVelocity = velocity;
+                    double power = velocity / Drive.PARAMS.maxV;
+                    if (power > 1) power = 1;
+                    if (power < 0) power = 0;
+                    drive.setPower(power * direction);
+                    return false;
+                } else {
+                    return false;
+                }
             }
         }
 
