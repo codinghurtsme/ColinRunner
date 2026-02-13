@@ -17,10 +17,11 @@
 //    }
 #include <cmath>
 #include <vector>
+#include <jni.h>
 class FeedForwardEquations{
 
-    public:
-        std::vector<double> getTimesX(double xPose, double pos,double timeToAccelerate,double kV, double maxA,double heading){
+    extern "C" JNIEXPORT jobjectArray JNICALL
+    Java_org_firstinspires_ftc_teamcode_AllDrives_FeedForwardEquations_getTimesX(double xPose, double pos,double timeToAccelerate,double kV, double maxA,double heading){
             double distanceNeeded = std::abs(xPose-pos);
             double timeToHalfway = (((.5)*(distanceNeeded))/kV)/maxA;
             if(timeToAccelerate<timeToHalfway){
@@ -36,8 +37,8 @@ class FeedForwardEquations{
                 }
         }
 
-public:
-    std::vector<double> getTimesY(double yPose, double pos,double kV, double maxA, double timeToAccelerate, double heading){
+    extern "C" jobjectArray JNICALL
+    Java_org_firstinspires_ftc_teamcode_AllDrives_FeedForwardEquations_getTimesY(double yPose, double pos,double kV, double maxA, double timeToAccelerate, double heading){
         double distanceNeeded = std::abs(yPose-pos);
         double timeToHalfway = (((.5)*(distanceNeeded))/kV)/maxA;
         if(timeToAccelerate<timeToHalfway){
