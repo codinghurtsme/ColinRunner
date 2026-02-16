@@ -1,6 +1,7 @@
 package com.example.lib.TrajectoryManager;
 
 import com.example.lib.Utils.FPos;
+import com.example.lib.Utils.SimBot;
 import com.example.lib.Utils.Utilities;
 
 import java.util.ArrayList;
@@ -17,10 +18,11 @@ public class SimAction {
 
     public static class lineToX extends Action{
 
-        public lineToX(double X) {
+        public lineToX(SimBot bot, double X) {
             targetPos = new FPos();
 
             this.targetPos.setX(X + 72);
+            this.targetPos.setY(bot.getPos().getY());
         }
 
         @Override
@@ -29,5 +31,5 @@ public class SimAction {
         }
     }
 
-    public static Action lineToX(double X) {return new lineToX(X);}
+    public static Action lineToX(SimBot bot, double X) {return new lineToX(bot, X);}
 }
