@@ -13,8 +13,7 @@ public class Runner {
     public static void main(String[] args) {
 
         PathFrame frame = new PathFrame();
-        frame.addBot(18,18, 18, new FPos(0,0, 0));
 
-        frame.addPath(new Path(SimAction.lineToX(1)));
+        frame.addPath(new Path(SimAction.lineToX(frame.addBot(18,18, 18, new FPos(72,72, 0)), 10)));
     }
 }

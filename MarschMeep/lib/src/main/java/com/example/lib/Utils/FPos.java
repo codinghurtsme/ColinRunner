@@ -7,8 +7,8 @@ public class FPos {
     public double heading;
 
     public FPos(double x, double y, double heading) {
-        this.x = x + 72;
-        this.y = y + 72;
+        this.x = x;
+        this.y = y;
         this.heading = heading;
     }
 

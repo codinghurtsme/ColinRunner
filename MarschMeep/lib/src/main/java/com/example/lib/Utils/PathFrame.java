@@ -36,15 +36,17 @@ public class PathFrame {
     private ArrayList<Point2D.Double> path = new ArrayList<>();
 
     private ArrayList<Path> totalPaths = new ArrayList<>();
+    private ArrayList<Path> pat = new ArrayList<>();
 
     public PathFrame() {
         frame = new JFrame();
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
-        frame.setUndecorated(true);
+
         frame.setBackground(Color.DARK_GRAY);
         frame.setLayout(new BorderLayout());
+        frame.setName("MarschMeep");
 
 
         fieldPanel = new FieldPanel();
@@ -72,6 +74,7 @@ public class PathFrame {
 
     public void addPath(Path p) {
         this.totalPaths.add(p);
+        this.pat.add(p);
     }
 
     private JPanel createControlPanel() {
@@ -129,9 +132,10 @@ public class PathFrame {
 
 
 
-    public void addBot(int size, int width, int height, FPos pos) {
+    public SimBot addBot(int size, int width, int height, FPos pos) {
         robot = new SimBot(size, width, height, pos);
         this.rInitPos = pos;
+        return robot;
     }
 
     public void drawField(Graphics2D g2, int fx, int fy, int fsize) {
@@ -241,6 +245,11 @@ public class PathFrame {
 
         public void resetBot() {
             robot.setPose(rInitPos);
+            totalPaths.clear();
+            for(Path p: pat) {
+                totalPaths.add(p);
+            }
+
             repaint();
         }
 
@@ -303,7 +312,7 @@ public class PathFrame {
                 int fps = 60;
                 int durationPerSegmentMs = 1000;
 
-                animTimer =  new Timer(1000 / fps, e -> {
+                animTimer =  new Timer(durationPerSegmentMs / fps, e -> {
                     FPos rPos = robot.getPos();
 
                    FPos targetPos = action.getTargetPos();
@@ -321,12 +330,15 @@ public class PathFrame {
                     double t = animT;
 
                     Point2D.Double a = new Point2D.Double(rPos.getX(), rPos.getY());
-                    float lerpedX = Utilities.lerp((float) rPos.getX(), (float) targetPos.getX(), 0.2f);
-                    float lerpedY = Utilities.lerp((float) rPos.getY(), (float) targetPos.getY(), 0.2f);
-                    Point2D.Double b = new Point2D.Double(lerpedX, lerpedY);
+
+                    Point2D pos = new Point2D.Float(Utilities.lerp((float) a.x, (float) targetPos.x, (float) t),
+                                                    Utilities.lerp((float) a.y, (float) targetPos.y, (float) t)
+                            );
+
                     double angle = Math.atan2(targetPos.getY() - a.y, targetPos.getX() - a.x);
 
-                    robot.setPose(b.x, b.y, angle);
+
+                    robot.setPose(pos.getX(), pos.getY(), angle);
                     repaint();
                 });
 
