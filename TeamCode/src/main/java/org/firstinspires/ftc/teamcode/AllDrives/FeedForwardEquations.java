@@ -52,14 +52,14 @@ public class FeedForwardEquations {
 //    private static double distanceTraveledY(double time,Pose2d pose){
 //        return (.5*(Math.pow(time,2)))*maxA*Math.sin(pose.heading);
 //    }
-//    private static double timeTraveledY(double distance,Pose2d pose){
+//    privte static double timeTraveledY(double distance,Pose2d pose){
 //        return Math.sqrt((2*distance)/(maxA*Math.sin(pose.heading)));
 //    }
     static {
         System.loadLibrary("FeedForwardEquations");
     }
-    native static double[] getTimesX(double xPose, double pos,double timeToAccelerate,double kV, double maxA,double heading);
-    native static double[] getTimesY(double yPose, double pos,double timeToAccelerate,double kV, double maxA,double heading);
+    static native double[] getTimesX(double xPose, double pos,double timeToAccelerate,double kV, double maxA,double heading);
+    static native double[] getTimesY(double yPose, double pos,double timeToAccelerate,double kV, double maxA,double heading);
 
     public static double[] getTimesX(Pose2D pose, double pos){
         return getTimesX(pose.getX(DistanceUnit.INCH), pos, timeToAccelerate,kV, maxA, pose.getHeading(AngleUnit.DEGREES));
