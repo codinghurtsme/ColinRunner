@@ -14,6 +14,6 @@ public class Runner {
 
         PathFrame frame = new PathFrame();
 
-        frame.addPath(new Path(SimAction.lineToX(frame.addBot(18,18, 18, new FPos(72,72, 0)), 10)));
+        frame.addPath(new Path(SimAction.lineToX(frame.addBot(18,18, 18, new FPos(72,72, 0)), 20)));
     }
 }

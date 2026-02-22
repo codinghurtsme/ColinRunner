@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.AllActions;
 
 
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.AllDrives.Drive;
 import org.firstinspires.ftc.teamcode.AllDrives.FeedForwardEquations;
-import org.firstinspires.ftc.teamcode.AllDrives.Pose2d;
 import org.firstinspires.ftc.teamcode.Exceptions.TangentialPath;
 import org.firstinspires.ftc.teamcode.Exceptions.ZeroDistancePath;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,16 +16,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TrajectoryBuilder extends ActionBuilder {
-    private Pose2d pose;
+    private Pose2D pose;
     private final Drive drive;
 
     private List<Actions> actions = new ArrayList<Actions>();
-    public TrajectoryBuilder(Pose2d pose, Drive drive){
+    public TrajectoryBuilder(Pose2D pose, Drive drive){
         this.pose=pose;
         this.drive = drive;
     }
 
-    public TrajectoryBuilder(Pose2d pose, Drive drive, Object... object) {
+    public TrajectoryBuilder(Pose2D pose, Drive drive, Object... object) {
         this(pose, drive);
 
         for(Object obj: object) {
@@ -41,7 +43,7 @@ public class TrajectoryBuilder extends ActionBuilder {
         }
     }
 
-    public void updatePose(Pose2d pose){
+    public void updatePose(Pose2D pose){
         this.pose = pose;
     }
     public class lineToX extends ActionBuilder.Actions {
@@ -54,9 +56,9 @@ public class TrajectoryBuilder extends ActionBuilder {
         private final FeedForwardEquations feed = new FeedForwardEquations(drive);
         public lineToX(double pos){
             this.pos = pos;
-            if(pos == pose.x) throw new ZeroDistancePath();
-            if((pose.heading<=91&&pose.heading>=89)||(pose.heading<=271&&pose.heading>=269)) throw new TangentialPath("x","lineToY");
-            direction = Math.signum(pos-pose.x);
+            if(pos == pose.getX(DistanceUnit.INCH)) throw new ZeroDistancePath();
+            if((pose.getHeading(AngleUnit.DEGREES)<=91&&pose.getHeading(AngleUnit.DEGREES)>=89)||(pose.getHeading(AngleUnit.DEGREES)<=271&&pose.getHeading(AngleUnit.DEGREES)>=269)) throw new TangentialPath("x","lineToY");
+            direction = Math.signum(pos-pose.getX(DistanceUnit.INCH));
         }
         double[] times = FeedForwardEquations.getTimesX(pose,pos);
         public boolean run(){
@@ -130,9 +132,9 @@ public class TrajectoryBuilder extends ActionBuilder {
         private final ElapsedTime timer = new ElapsedTime();
         public lineToY(double pos){
             this.pos = pos;
-            if(pos == pose.y) throw new ZeroDistancePath();
-            if((pose.heading<=1&&pose.heading>=-1)||(pose.heading<=181&&pose.heading>=179)) throw new TangentialPath("x","lineToY");
-            direction = Math.signum(pos-pose.y);
+            if(pos == pose.getY(DistanceUnit.INCH)) throw new ZeroDistancePath();
+            if((pose.getHeading(AngleUnit.DEGREES)<=1&&pose.getHeading(AngleUnit.DEGREES)>=-1)||(pose.getHeading(AngleUnit.DEGREES)<=181&&pose.getHeading(AngleUnit.DEGREES)>=179)) throw new TangentialPath("x","lineToY");
+            direction = Math.signum(pos-pose.getY(DistanceUnit.INCH));
         }
 
         double[] times = FeedForwardEquations.getTimesY(pose,pos);
@@ -217,7 +219,7 @@ public class TrajectoryBuilder extends ActionBuilder {
         private double degrees;
         public turnTo(double degrees){
             this.degrees = degrees;
-            if(degrees == pose.heading) throw new ZeroDistancePath();
+            if(degrees == pose.getHeading(AngleUnit.DEGREES)) throw new ZeroDistancePath();
         }
         public boolean run(){
             return true;

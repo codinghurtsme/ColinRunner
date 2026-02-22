@@ -18,6 +18,8 @@
 #include <cmath>
 #include <vector>
 #include <jni.h>
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
 class FeedForwardEquations{
 
     extern "C" JNIEXPORT jobjectArray JNICALL
@@ -52,22 +54,25 @@ class FeedForwardEquations{
             return timesToReturn;
         }
     }
-
     private:
-        static double distanceTraveledX(double time,double heading,double maxA){
-            return (.5*(std::pow(time,2)))*maxA*std::cos(heading);
+        static double distanceTraveledX(doubletime,double heading,double maxA){
+            return (.5*(std::pow(time,2)))*maxA*toDegrees(std::cos(heading));
     }
     private:
         static double timeTraveledX(double distance,double heading,double maxA){
-            return std::sqrt((2*distance)/(maxA*std::cos(heading)));
+            return std::sqrt((2*distance)/(maxA*toDegrees(std::cos(heading))));
     }
 
     private:
         double distanceTraveledY(double time,double heading, double maxA){
-            return (.5*(std::pow(time,2)))*maxA*std::sin(heading);
+            return (.5*(std::pow(time,2)))*maxA*toDegrees(std::sin(heading));
     }
     private:
         double timeTraveledY(double distance,double heading, double maxA){
-            return std::sqrt((2*distance)/(maxA*std::sin(heading)));
+            return std::sqrt((2*distance)/(maxA*toDegrees(std::sin(heading))));
+    }
+    private:
+        double toDegrees(double radians){
+        return radians*(180/M_PI);
     }
 };
