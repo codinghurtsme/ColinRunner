@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-// Non-RR imports
-//import com.acmerobotics.roadrunner.Pose2d;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.AllDrives.Drive;
-import org.firstinspires.ftc.teamcode.AllDrives.Pose2d;
 
 public class Tuning extends LinearOpMode {
 
@@ -13,8 +12,7 @@ public class Tuning extends LinearOpMode {
         KSTATIC(1),
         KVELOCITY(2),
         MAXVELOCITY(3),
-        MAXACCELERATION(4),
-        DISTANCETUNING(5);
+        MAXACCELERATION(4);
 
         private final int value;
 
@@ -26,12 +24,12 @@ public class Tuning extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Drive drive = new Drive(hardwareMap);
-        Pose2d startingPose = drive.getPose();
+        Pose2D startingPose = drive.getPose();
 
         int selectedTuningMode = 1;
         TUNINGMODES mode = TUNINGMODES.KSTATIC;
         if(gamepad1.triangleWasPressed()) selectedTuningMode++;
-        if(selectedTuningMode==6) selectedTuningMode = 1;
+        if(selectedTuningMode==5) selectedTuningMode = 1;
 
         switch (selectedTuningMode) {
             default: {
@@ -49,9 +47,7 @@ public class Tuning extends LinearOpMode {
             case 4: {
                 mode = TUNINGMODES.MAXACCELERATION;
             } break;
-            case 5: {
-                mode = TUNINGMODES.DISTANCETUNING;
-            } break;
+
 
         }
 
@@ -64,12 +60,27 @@ public class Tuning extends LinearOpMode {
         if(isStopRequested()) return;
 
         while(opModeIsActive()){
-            if(mode.getVal() == 5){
-                telemetry.addLine("Push Robot Straight");
-                double dx = drive.updateX()-startingPose.x;
-                double dy = drive.updateY()-startingPose.y;
-                telemetry.addData("Distance Traveled",Math.hypot(dx,dy));
-                telemetry.addLine("Distanced Traveled / Actual Distance = Distance Offset");
+            if(mode.getVal() == 1){
+                telemetry.addLine("Let Robot Run Until It Stops");
+                double value = drive.kStatic();
+                telemetry.addData("KStatic Equals",value);
+
+            }
+            if(mode.getVal() == 2){
+                telemetry.addLine("Let Robot Run Until It Runs and Stops");
+                double value = drive.kVelocity();
+                telemetry.addData("KVelocity Equals",value);
+
+            }if(mode.getVal() == 3){
+                telemetry.addLine("Let Robot Run Until It Runs Three Times");
+                double value = drive.maxVelocity();
+                telemetry.addData("Max Velocity Equals",value);
+
+            }if(mode.getVal() == 4){
+                telemetry.addLine("Let Robot Run Until It Runs Three Times");
+                double value = drive.maxAcceleration();
+                telemetry.addData("Max Acceleration Equals",value);
+
             }
 
             telemetry.update();
