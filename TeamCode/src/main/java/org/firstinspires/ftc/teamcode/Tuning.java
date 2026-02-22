@@ -2,11 +2,15 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.AllDrives.Drive;
 
-public class Tuning extends LinearOpMode {
+
+@TeleOp
+public class Tuning extends OpMode {
 
     public enum TUNINGMODES {
         KSTATIC(1),
@@ -20,14 +24,22 @@ public class Tuning extends LinearOpMode {
 
         public int getVal() {return value;}
     }
+    Drive drive = new Drive(hardwareMap);
 
+    int selectedTuningMode = 1;
+    TUNINGMODES mode = TUNINGMODES.KSTATIC;
     @Override
-    public void runOpMode() throws InterruptedException {
-        Drive drive = new Drive(hardwareMap);
+    public void init(){
+        drive.onStart();
         Pose2D startingPose = drive.getPose();
 
-        int selectedTuningMode = 1;
-        TUNINGMODES mode = TUNINGMODES.KSTATIC;
+    }
+
+
+
+    @Override
+    public void loop(){
+
         if(gamepad1.triangleWasPressed()) selectedTuningMode++;
         if(selectedTuningMode==5) selectedTuningMode = 1;
 
@@ -54,37 +66,53 @@ public class Tuning extends LinearOpMode {
         telemetry.addData("Current Tuning Mode: ",mode);
         telemetry.update();
 
-
-        waitForStart();
-
-        if(isStopRequested()) return;
-
-        while(opModeIsActive()){
-            if(mode.getVal() == 1){
-                telemetry.addLine("Let Robot Run Until It Stops");
-                double value = drive.kStatic();
-                telemetry.addData("KStatic Equals",value);
-
+        if(mode.getVal() == 1){
+            telemetry.addLine("Let Robot Run Until It Stops");
+            double value = 0;
+            try {
+                value = drive.kStatic();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            if(mode.getVal() == 2){
-                telemetry.addLine("Let Robot Run Until It Runs and Stops");
-                double value = drive.kVelocity();
-                telemetry.addData("KVelocity Equals",value);
-
-            }if(mode.getVal() == 3){
-                telemetry.addLine("Let Robot Run Until It Runs Three Times");
-                double value = drive.maxVelocity();
-                telemetry.addData("Max Velocity Equals",value);
-
-            }if(mode.getVal() == 4){
-                telemetry.addLine("Let Robot Run Until It Runs Three Times");
-                double value = drive.maxAcceleration();
-                telemetry.addData("Max Acceleration Equals",value);
-
-            }
-
-            telemetry.update();
+            telemetry.addData("KStatic Equals",value);
         }
+
+        if(mode.getVal() == 2){
+            telemetry.addLine("Let Robot Run Until It Runs and Stops");
+            double value = 0;
+            try {
+                value = drive.kVelocity();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            telemetry.addData("KVelocity Equals",value);
+        }
+
+        if(mode.getVal() == 3){
+            telemetry.addLine("Let Robot Run Until It Runs Three Times");
+            double value = 0;
+            try {
+                value = drive.maxVelocity();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            telemetry.addData("Max Velocity Equals",value);
+
+        }
+
+        if(mode.getVal() == 4){
+
+            telemetry.addLine("Let Robot Run Until It Runs Three Times");
+            double value = 0;
+            try {
+                value = drive.maxAcceleration();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            telemetry.addData("Max Acceleration Equals",value);
+           }
+
+        telemetry.update();
     }
 }
 

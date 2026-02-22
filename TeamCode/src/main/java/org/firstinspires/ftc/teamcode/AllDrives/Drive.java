@@ -63,7 +63,6 @@ public class Drive {
     public Drive(HardwareMap hardwareMap, Pose2D pos) {
         this(hardwareMap);
         this.pose = pos;
-        pinpoint.setPosition(pos);
     }
 
 //    public double updateX(){
@@ -87,7 +86,12 @@ public class Drive {
 //    public void setPose(double x, double y, double heading){
 //        pose.setPose(x,y,heading);
 //    }
+    public void onStart(){
+        pinpoint.recalibrateIMU();
+        pinpoint.setPosition(pose);
 
+
+    }
     public Pose2D getPose(){
         return pose;
     }
@@ -139,6 +143,8 @@ public class Drive {
         backRightMotor.setPower(p);
         backLeftMotor.setPower(p);
     }
+
+
 
     public double kStatic() throws InterruptedException {
         double power = 0;
