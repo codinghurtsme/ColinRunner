@@ -21,7 +21,8 @@ public class DeleteAfterUse extends LinearOpMode {
         Drive drive = new Drive(hardwareMap);
 
 
-        TrajectoryBuilder traj = new TrajectoryBuilder(drive.pose, drive);
+        TrajectoryBuilder traj = new TrajectoryBuilder(drive.pose, drive
+        );
 
 
         SequentialAction sequentialAction = new SequentialAction(

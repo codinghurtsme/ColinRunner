@@ -63,8 +63,8 @@ public class TrajectoryBuilder extends ActionBuilder {
         double[] times = FeedForwardEquations.getTimesX(pose,pos);
         public boolean run(){
             if(times.length==3) {
-                if (!initialized) initialized = true;
-                timer.reset();
+                if (!initialized){ initialized = true;
+                timer.reset();}
                 if (timer.seconds() >= times[2]) {
                     drive.setPower(0);
                     return true;
@@ -94,8 +94,8 @@ public class TrajectoryBuilder extends ActionBuilder {
                 }
             }
             else {
-                if (!initialized) initialized = true;
-                timer.reset();
+                if (!initialized){ initialized = true;
+                timer.reset();}
                 if (timer.seconds() >= times[1]) {
                     drive.setPower(0);
                     return true;
