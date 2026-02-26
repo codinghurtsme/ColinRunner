@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.AllDrives;
+package FeedForward;
 
 import static org.firstinspires.ftc.teamcode.AllDrives.Drive.PARAMS.*;
-import org.firstinspires.*;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.AllDrives.Drive;
 
 public class FeedForwardEquations {
     private final Drive drive;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Exceptions;
+package FeedForward.Exceptions;
 
 public class ZeroDistancePath extends RuntimeException {
     public ZeroDistancePath() {

@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package FeedForward;
 
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 

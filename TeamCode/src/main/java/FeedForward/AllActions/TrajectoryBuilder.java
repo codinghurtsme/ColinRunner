@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.AllActions;
+package FeedForward.AllActions;
 
 
 
@@ -6,9 +6,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.AllDrives.Drive;
-import org.firstinspires.ftc.teamcode.AllDrives.FeedForwardEquations;
-import org.firstinspires.ftc.teamcode.Exceptions.TangentialPath;
-import org.firstinspires.ftc.teamcode.Exceptions.ZeroDistancePath;
+import FeedForward.FeedForwardEquations;
+import FeedForward.Exceptions.TangentialPath;
+import FeedForward.Exceptions.ZeroDistancePath;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;

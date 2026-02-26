@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package FeedForward;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.AllActions.ActionBuilder;
-import org.firstinspires.ftc.teamcode.AllActions.SequentialAction;
-import org.firstinspires.ftc.teamcode.AllActions.TrajectoryBuilder;
+import FeedForward.AllActions.ActionBuilder;
+import FeedForward.AllActions.SequentialAction;
+import FeedForward.AllActions.TrajectoryBuilder;
 import org.firstinspires.ftc.teamcode.AllDrives.Drive;
 
 @Autonomous
