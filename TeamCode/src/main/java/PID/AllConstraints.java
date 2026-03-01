@@ -7,5 +7,7 @@ public class AllConstraints {
 
     public static PIDController heading = new PIDController(1,0,0);
 
+    public static Constants constant = new Constants(2,5);
+
 
 }
