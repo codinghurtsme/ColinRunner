@@ -9,11 +9,11 @@ import java.util.List;
 public abstract class ActionBuilder {
     abstract boolean timeUpdate();
     static ElapsedTime timer = new ElapsedTime();
-    abstract protected static class Actions{
+    abstract public static class Actions{
 
         protected boolean initialized;
 
-        abstract boolean run();
+        public abstract boolean run();
 
     }
 

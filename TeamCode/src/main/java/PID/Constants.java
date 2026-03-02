@@ -7,15 +7,18 @@ public class Constants {
     private double breakingStart;
     private double breakingStrength;
     private double maxPower;
+    private double tolerance;
 
-    public Constants(double breakingStrength, double breakingStart){
+    public Constants(double breakingStrength, double breakingStart,double maxPower,double tolerance){
         this.breakingStrength = breakingStrength;
         this.breakingStart = breakingStart;
-        maxPower = 1;
+        this.maxPower = maxPower;
+        this.tolerance = tolerance;
+        if(maxPower>1)maxPower = 1;
     }
     public Constants() {
-        this(0, 0);
-        maxPower = 1;
+        this(1, 5,1,5);
+        if(maxPower>1)maxPower = 1;
     }
 
     public void setBreakingStart(double breakingStart){
@@ -23,9 +26,6 @@ public class Constants {
     }
     public void setBreakingStrength(double breakingStrength){
         this.breakingStrength = breakingStrength;
-    }
-    public void setMaxPower(double maxPower){
-        this.maxPower = maxPower;
     }
 
     public double getDeceleration(Pose2D current, Pose2D target){
@@ -40,8 +40,20 @@ public class Constants {
         }
         else return 0;
     }
+
     public double getMaxPower(){
         return maxPower;
     }
+    public void setMaxPower(double maxPower){
+        this.maxPower = maxPower;
+        if(maxPower>1)maxPower = 1;
+    }
+    public void setTolerance(double tolerance){
+        this.tolerance = tolerance;
+    }
+    public double getTolerance(){
+        return tolerance;
+    }
+
 
 }

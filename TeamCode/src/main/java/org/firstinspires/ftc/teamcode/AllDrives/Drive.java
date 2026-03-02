@@ -63,6 +63,7 @@ public class Drive {
     public Drive(HardwareMap hardwareMap, Pose2D pos) {
         this(hardwareMap);
         this.pose = pos;
+        pinpoint.setPosition(pose);
     }
 
 //    public double updateX(){
@@ -142,6 +143,18 @@ public class Drive {
         frontLeftMotor.setPower(p);
         backRightMotor.setPower(p);
         backLeftMotor.setPower(p);
+    }
+    public void setFrontLeft(double power){
+        frontLeftMotor.setPower(power);
+    }
+    public void setFrontRight(double power){
+        frontRightMotor.setPower(power);
+    }
+    public void setBackLeft(double power){
+        backLeftMotor.setPower(power);
+    }
+    public void setBackRight(double power){
+        backRightMotor.setPower(power);
     }
 
 

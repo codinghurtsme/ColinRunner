@@ -88,10 +88,11 @@ public class PIDMovement {
 
 
 
-        frontLeft += dT * frontLeftAccel;
-        frontRight += dT * frontRightAccel;
-        backLeft += dT * backLeftAccel;
-        backRight += dT * backRightAccel;
+        frontLeft = (powers[0] + dT * frontLeftAccel) * AllConstraints.constant.getDeceleration(current,target);
+        frontRight = (powers[1] + dT * frontRightAccel) * AllConstraints.constant.getDeceleration(current,target);
+        backLeft = (powers[2] + dT * backLeftAccel) * AllConstraints.constant.getDeceleration(current,target);
+        backRight = (powers[3] + dT * backRightAccel) * AllConstraints.constant.getDeceleration(current,target);
+
 
         return new double[]{frontLeft, frontRight, backLeft, backRight};
     }
