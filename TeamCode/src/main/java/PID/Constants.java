@@ -1,24 +1,30 @@
 package PID;
 
+import static org.firstinspires.ftc.teamcode.AllDrives.Drive.PARAMS.maxV;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class Constants {
     private double breakingStart;
     private double breakingStrength;
-    private double maxPower;
+    private double velocity;
     private double tolerance;
 
-    public Constants(double breakingStrength, double breakingStart,double maxPower,double tolerance){
+    public Constants(double breakingStrength, double breakingStart,double velocity,double tolerance){
         this.breakingStrength = breakingStrength;
         this.breakingStart = breakingStart;
-        this.maxPower = maxPower;
+        this.velocity = velocity;
         this.tolerance = tolerance;
-        if(maxPower>1)maxPower = 1;
+        if(velocity>maxV){
+            velocity = maxV;
+        }
     }
     public Constants() {
         this(1, 5,1,5);
-        if(maxPower>1)maxPower = 1;
+        if(velocity>maxV){
+            velocity = maxV;
+        }
     }
 
     public void setBreakingStart(double breakingStart){
@@ -41,12 +47,14 @@ public class Constants {
         else return 0;
     }
 
-    public double getMaxPower(){
-        return maxPower;
+    public double getMaxVelocity(){
+        return velocity;
     }
-    public void setMaxPower(double maxPower){
-        this.maxPower = maxPower;
-        if(maxPower>1)maxPower = 1;
+    public void setMaxPower(double velocity){
+        this.velocity = velocity;
+        if(velocity>maxV){
+            velocity = maxV;
+        }
     }
     public void setTolerance(double tolerance){
         this.tolerance = tolerance;
