@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 public class Drive {
-    public HardwareMap hardwareMap;
+    public final HardwareMap hardwareMap;
 
     public Pose2D pose;
 
@@ -21,16 +21,16 @@ public class Drive {
     private final DcMotor backRightMotor;
 
     public static class PARAMS {
-        public static double kStatic = 0;
-        public static double kV = 0;
-        public static double kA = 0;
-        public static double maxA = 1;
-         public static double maxV = 0;
-        public static double ticksPerInch = 0;
-        public static double latGains = 0;
-        public static double headingGains = 0;
-        public static double axialGains = 0;
-        public static double timeToAccelerate = maxV/maxA;
+        public static final double kStatic = 1;
+        public static final double kV = 1;
+        public static final double kA = 1;
+        public static final double maxA = 1;
+         public static final double maxV = 1;
+        public static final double ticksPerInch = 1;
+        public static final double latGains = 1;
+        public static final double headingGains = 1;
+        public static final double axialGains = 1;
+        public static final double timeToAccelerate = maxV/maxA;
         final double maxPower = 1/maxV;
 
 
@@ -159,7 +159,7 @@ public class Drive {
 
 
 
-    public double kStatic() throws InterruptedException {
+    private double kStatic() throws InterruptedException {
         double power = 0;
         double velocity = 0;
         int iterations = 0;
@@ -174,33 +174,40 @@ public class Drive {
         return power;
     }
 
-    public double kVelocity() throws InterruptedException {
+    public double[] velocities() throws InterruptedException {
         double kVSum = 0;
         int iterations = 0;
-        for(double power = .02; power + Drive.PARAMS.kStatic<=1; power+=.02){
+        double maxVelocitySum = 0;
+        double kStatic = kStatic();
+        double maxVelocity;
+        for(double power = .02; power + kStatic<=1; power+=.02){
             setPower(power+ Drive.PARAMS.kStatic);
             double velocity = getVelocity();
             if(velocity<=0) continue;
             double kV = power/velocity;
             kVSum +=kV;
             iterations++;
+            if(power+kStatic==1){
+                maxVelocitySum += getVelocity();
+            }
         }
         setPower(0);
-        return (kVSum/iterations);
+        maxVelocity = maxVelocitySum/iterations;
+        return new double[]{kStatic,(kVSum / iterations), maxVelocity};
     }
-    public double maxVelocity() throws InterruptedException {
-        double sum = 0;
-        for(int i = 0; i<=3; i++){
-            setPower(1.0);
-            Thread.sleep(500);
-            double velocity = getVelocity();
-            sum+=velocity;
-            setPower(0);
-            Thread.sleep(1000);
-        }
-        setPower(0);
-        return sum/4;
-    }
+//    public double maxVelocity() throws InterruptedException {
+//        double sum = 0;
+//        for(int i = 0; i<=3; i++){
+//            setPower(1.0);
+//            Thread.sleep(500);
+//            double velocity = getVelocity();
+//            sum+=velocity;
+//            setPower(0);
+//            Thread.sleep(1000);
+//        }
+//        setPower(0);
+//        return sum/4;
+//    }
     public double maxAcceleration() throws InterruptedException {
         double sum = 0;
         for(int i = 0; i<=3; i++){
@@ -214,4 +221,5 @@ public class Drive {
         setPower(0);
         return sum/4;
     }
+
 }

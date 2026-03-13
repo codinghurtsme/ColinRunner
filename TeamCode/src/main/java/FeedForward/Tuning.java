@@ -12,9 +12,7 @@ import org.firstinspires.ftc.teamcode.AllDrives.Drive;
 public class Tuning extends OpMode {
 
     public enum TUNINGMODES {
-        KSTATIC(1),
-        KVELOCITY(2),
-        MAXVELOCITY(3),
+        VELOCITY(1),
         MAXACCELERATION(4);
 
         private final int value;
@@ -23,10 +21,10 @@ public class Tuning extends OpMode {
 
         public int getVal() {return value;}
     }
-    Drive drive = new Drive(hardwareMap);
+    final Drive drive = new Drive(hardwareMap);
 
     int selectedTuningMode = 1;
-    TUNINGMODES mode = TUNINGMODES.KSTATIC;
+    TUNINGMODES mode = TUNINGMODES.VELOCITY;
     @Override
     public void init(){
         drive.onStart();
@@ -43,21 +41,16 @@ public class Tuning extends OpMode {
         if(selectedTuningMode==5) selectedTuningMode = 1;
 
         switch (selectedTuningMode) {
+
+            case 1: {
+                mode = TUNINGMODES.VELOCITY;
+            } break;
+            case 2: {
+                mode = TUNINGMODES.MAXACCELERATION;
+            } break;
             default: {
                 selectedTuningMode = 1;
             }
-            case 1: {
-                mode = TUNINGMODES.KSTATIC;
-            } break;
-            case 2: {
-                mode = TUNINGMODES.KVELOCITY;
-            } break;
-            case 3: {
-                mode = TUNINGMODES.MAXVELOCITY;
-            } break;
-            case 4: {
-                mode = TUNINGMODES.MAXACCELERATION;
-            } break;
 
 
         }
@@ -67,42 +60,22 @@ public class Tuning extends OpMode {
 
         if(mode.getVal() == 1){
             telemetry.addLine("Let Robot Run Until It Stops");
-            double value = 0;
+            double[] values;
             try {
-                value = drive.kStatic();
+                values = drive.velocities();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            telemetry.addData("KStatic Equals",value);
+            telemetry.addData("KStatic Equals",values[0]);
+            telemetry.addData("KV Equals",values[1]);
+            telemetry.addData("Max Velocity",values[2]);
+
         }
 
         if(mode.getVal() == 2){
-            telemetry.addLine("Let Robot Run Until It Runs and Stops");
-            double value = 0;
-            try {
-                value = drive.kVelocity();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            telemetry.addData("KVelocity Equals",value);
-        }
-
-        if(mode.getVal() == 3){
-            telemetry.addLine("Let Robot Run Until It Runs Three Times");
-            double value = 0;
-            try {
-                value = drive.maxVelocity();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            telemetry.addData("Max Velocity Equals",value);
-
-        }
-
-        if(mode.getVal() == 4){
 
             telemetry.addLine("Let Robot Run Until It Runs Three Times");
-            double value = 0;
+            double value;
             try {
                 value = drive.maxAcceleration();
             } catch (InterruptedException e) {

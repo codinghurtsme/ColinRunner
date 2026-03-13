@@ -14,7 +14,7 @@ public class PIDMovement {
     private final ElapsedTime timer = new ElapsedTime();
     private double lastTime;
 
-    double maxPower = AllConstraints.constant.getMaxVelocity()/maxV;
+    final double maxPower = AllConstraints.constant.getMaxVelocity()/maxV;
 
     public PIDMovement(){
         lastTime =  0;
