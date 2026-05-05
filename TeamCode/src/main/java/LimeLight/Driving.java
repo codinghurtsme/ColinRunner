@@ -1,0 +1,79 @@
+package LimeLight;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import static org.firstinspires.ftc.teamcode.AllDrives.Drive.PARAMS.maxV;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
+import PID.AllConstraints;
+
+public class Driving {
+    private final Precision precision;
+    private final ElapsedTime timer;
+
+    public Driving(){
+        precision = new Precision(0);
+        timer = new ElapsedTime();
+    }
+
+    public double[] turningPowers(){
+        double headingError = Math.toRadians(precision.degreesToTag());
+        double currentTime = timer.seconds();
+        double dT = currentTime - lastTime;
+        lastTime = timer.seconds();
+
+        double headingScaled = AllConstraints.heading.getOutput(headingError,dT);
+
+        double frontLeft = (headingScaled) * AllConstraints.constant.getDeceleration(current,target);
+        double frontRight = (-headingScaled) * AllConstraints.constant.getDeceleration(current,target);
+        double backLeft = (headingScaled) * AllConstraints.constant.getDeceleration(current,target);
+        double backRight = (-headingScaled) * AllConstraints.constant.getDeceleration(current,target);
+
+
+        double max = Math.max(Math.max(Math.abs(frontLeft),Math.abs(frontRight)), Math.max(Math.abs(backLeft),Math.abs(backRight)));
+
+        if(max>maxPower){
+            frontLeft /= (max/maxPower);
+            frontLeft /= (max/maxPower);
+            backLeft /= (max/maxPower);
+            backRight /= (max/maxPower);
+        }
+
+
+        max = Math.max(Math.max(Math.abs(frontLeft),Math.abs(frontRight)), Math.max(Math.abs(backLeft),Math.abs(backRight)));
+
+        double velRatio = max / maxV;
+        velRatio = Math.min(maxPower, velRatio);
+
+//        tune to be higher if not quick and lower if slipping
+//        higher for smaller increase per speed, lower for higher increase
+
+        double currentMaxAccel = 8.0 - (velRatio * 6.0);
+
+        double frontLeftDelta = frontLeft - powers[0];
+        double frontRightDelta = frontLeft - powers[1];
+        double backLeftDelta = frontLeft - powers[2];
+        double backRightDelta = frontLeft - powers[3];
+
+        double maxDelta = Math.max(Math.max(Math.abs(frontLeftDelta),Math.abs(frontRightDelta)), Math.max(Math.abs(backLeftDelta),Math.abs(backRightDelta)));
+
+
+        double timeToAchieve = maxDelta / currentMaxAccel;
+
+        double frontLeftAccel = (frontLeftDelta*maxV)/(timeToAchieve+1e-6);
+        double frontRightAccel = (frontRightDelta*maxV)/(timeToAchieve+1e-6);
+        double backLeftAccel = (backLeftDelta*maxV)/(timeToAchieve+1e-6);
+        double backRightAccel = (backRightDelta*maxV)/(timeToAchieve+1e-6);
+
+
+
+
+        frontLeft = (powers[0] + dT * frontLeftAccel);
+        frontRight = (powers[1] + dT * frontRightAccel);
+        backLeft = (powers[2] + dT * backLeftAccel);
+        backRight = (powers[3] + dT * backRightAccel);
+
+
+        return new double[]{frontLeft, frontRight, backLeft, backRight};
+    }
+}

@@ -71,9 +71,9 @@ public class PIDMovement {
         double currentMaxAccel = 8.0 - (velRatio * 6.0);
 
         double frontLeftDelta = frontLeft - powers[0];
-        double frontRightDelta = frontLeft - powers[1];
-        double backLeftDelta = frontLeft - powers[2];
-        double backRightDelta = frontLeft - powers[3];
+        double frontRightDelta = frontRight - powers[1];
+        double backLeftDelta = backLeft - powers[2];
+        double backRightDelta = backRight - powers[3];
 
         double maxDelta = Math.max(Math.max(Math.abs(frontLeftDelta),Math.abs(frontRightDelta)), Math.max(Math.abs(backLeftDelta),Math.abs(backRightDelta)));
 
