@@ -10,6 +10,12 @@ public class Precision {
     public Precision(int id){
         this.id = id;
     }
+    public void setId(int id){
+        this.id=id;
+    }
+    public void setTolerance(double tol){
+        tolerance = tol;
+    }
     private LLResult fetchResult(){
         return LimeLightBasics.validResult();
     }

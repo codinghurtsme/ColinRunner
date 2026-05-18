@@ -1,0 +1,5 @@
+Choosing best case
+    - Distance/\
+    - Group/\
+    - Time Left/\
+
