@@ -4,22 +4,23 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 
 public class Precision {
-    private int id;
     private double tolerance;
-
-    public Precision(int id){
-        this.id = id;
-    }
-    public void setId(int id){
-        this.id=id;
-    }
+    /**
+     * Sets tolerance
+     */
     public void setTolerance(double tol){
         tolerance = tol;
     }
+    /**
+     * Fetches Results
+     */
     private LLResult fetchResult(){
         return LimeLightBasics.validResult();
     }
-    public double degreesToTag(){
+    /**
+     * Returns Degrees to April-Tag
+     */
+    public double degreesToTag(int id){
         LLResult result = fetchResult();
         if(result!=null){
             for (LLResultTypes.FiducialResult tag : result.getFiducialResults()) {
@@ -31,9 +32,11 @@ public class Precision {
         }
         return 1000;
     }
-    public boolean aimed(){
+    /**
+     * Returns if the Robot is Aimed at the April-Tag
+     */
+    public boolean aimed(int id){
         LLResult result = fetchResult();
-        if(Math.abs(degreesToTag())<tolerance)return true;
-        return false;
+        return Math.abs(degreesToTag(id)) < tolerance;
     }
 }

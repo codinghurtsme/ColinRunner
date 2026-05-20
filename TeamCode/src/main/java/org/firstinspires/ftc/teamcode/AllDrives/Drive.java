@@ -25,7 +25,7 @@ public class Drive {
         public static final double kV = 1;
         public static final double kA = 1;
         public static final double maxA = 1;
-         public static final double maxV = 1;
+        public static final double maxV = 1;
         public static final double ticksPerInch = 1;
         public static final double latGains = 1;
         public static final double headingGains = 1;

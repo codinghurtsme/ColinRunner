@@ -10,10 +10,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class Positioning {
 
-
     private static LLResult fetchResult(){
         return LimeLightBasics.validResult();
     }
+    /**
+     * Returns a 2D Position of the Robot based off of April-Tag Readings
+     */
     protected static Pose2D getPositionInField() {
         LLResult result = fetchResult();
 
@@ -29,7 +31,10 @@ public class Positioning {
 
         return new Pose2D(DistanceUnit.INCH, x, y, AngleUnit.RADIANS, heading);
     }
-
+    /**
+     * Returns a 2D Position of the Robot based off of April-Tag
+     * readings, and if none are available, reruns fallback position
+     */
     protected static Pose2D getPositionInField(Pose2D fallback) {
         LLResult result = fetchResult();
         Pose3D pose3D = result.getBotpose_MT2();

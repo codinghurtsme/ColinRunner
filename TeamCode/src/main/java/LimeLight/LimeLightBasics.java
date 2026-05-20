@@ -15,6 +15,9 @@ public class LimeLightBasics {
     public LimeLightBasics(HardwareMap hardwareMap){
         limelight = hardwareMap.get(Limelight3A.class,"limelight");
     }
+    /**
+     * Returns a valid LLResult
+     */
     protected static LLResult validResult() {
             LLResult result = limelight.getLatestResult();
             //
@@ -23,10 +26,16 @@ public class LimeLightBasics {
             }
         return null;
     }
+    /**
+     * Returns simple results tA, tX, and tY
+     */
     protected static double[] simpleResults(LLResult result){
         if (result != null)return new double[]{result.getTa(),result.getTx(),result.getTy()};
         return new double[]{0,0,0};
     }
+    /**
+     * Returns current pipeline type and index
+     */
     protected static String pipelineInfo(LLResult result){
         if (result != null) {
             int pipelineIndex = result.getPipelineIndex();
@@ -35,6 +44,9 @@ public class LimeLightBasics {
         }
         return "Invalid LLResult";
     }
+    /**
+     * Returns all April-Tags
+     */
     protected static ArrayList<Integer> aprilTag(LLResult result){
         if (result != null) {
             ArrayList<Integer> tagList = new ArrayList<Integer>();

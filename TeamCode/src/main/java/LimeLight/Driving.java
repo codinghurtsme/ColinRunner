@@ -11,23 +11,19 @@ import PID.AllConstraints;
 
 public class Driving {
     private final Precision precision;
-    private final ElapsedTime timer;
-    private double lastTime;
-    private int id;
-    private Drive drive;
+    private final Drive drive;
 
     public Driving(int id, HardwareMap hardwareMap){
-        this.id=id;
-        precision = new Precision(id);
-        timer = new ElapsedTime();
-        lastTime = 0;
+        precision = new Precision();
         drive = new Drive(hardwareMap);
     }
-
-    public void aline(int id){
-        if(precision.aimed())return;
-        if(precision.degreesToTag()==1000)return;
-        if(precision.degreesToTag()>0){
+    /**
+     * Aligns robot using four wheels to a specified April-Tag
+     */
+    public void align(int id){
+        if(precision.aimed(id))return;
+        if(precision.degreesToTag(id)==1000)return;
+        if(precision.degreesToTag(id)>0){
             drive.setBackRight(.5);
             drive.setBackLeft(-.5);
             drive.setFrontRight(.5);
