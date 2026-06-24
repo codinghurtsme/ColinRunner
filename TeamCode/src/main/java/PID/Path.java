@@ -92,7 +92,7 @@ public class Path extends ActionBuilder.Actions {
         this.tolerance = tolerance;
     }
     public boolean isBusy(){
-        return finished;
+        return !finished;
     }
     public boolean atSecondStage(){
         return secondStage;

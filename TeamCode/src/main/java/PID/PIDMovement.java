@@ -29,7 +29,7 @@ public class PIDMovement {
         double headingError = target.getHeading(AngleUnit.RADIANS) - currentHeading;
         double currentTime = timer.seconds();
         double dT = currentTime - lastTime;
-        lastTime = timer.seconds();
+        lastTime = currentTime;
 
         double xRobot = xError * Math.cos(currentHeading) + yError * Math.sin(currentHeading);
         double yRobot = -xError * Math.sin(currentHeading) + yError * Math.cos(currentHeading);
@@ -54,7 +54,7 @@ public class PIDMovement {
 
         if(max>maxPower){
             frontLeft /= (max/maxPower);
-            frontLeft /= (max/maxPower);
+            frontRight /= (max/maxPower);
             backLeft /= (max/maxPower);
             backRight /= (max/maxPower);
         }
@@ -101,7 +101,7 @@ public class PIDMovement {
         double headingError = target.getHeading(AngleUnit.RADIANS) - currentHeading;
         double currentTime = timer.seconds();
         double dT = currentTime - lastTime;
-        lastTime = timer.seconds();
+        lastTime = currentTime;
 
         double headingScaled = AllConstraints.heading.getOutput(headingError,dT);
 
@@ -115,7 +115,7 @@ public class PIDMovement {
 
         if(max>maxPower){
             frontLeft /= (max/maxPower);
-            frontLeft /= (max/maxPower);
+            frontRight /= (max/maxPower);
             backLeft /= (max/maxPower);
             backRight /= (max/maxPower);
         }
@@ -132,9 +132,9 @@ public class PIDMovement {
         double currentMaxAccel = 8.0 - (velRatio * 6.0);
 
         double frontLeftDelta = frontLeft - powers[0];
-        double frontRightDelta = frontLeft - powers[1];
-        double backLeftDelta = frontLeft - powers[2];
-        double backRightDelta = frontLeft - powers[3];
+        double frontRightDelta = frontRight - powers[1];
+        double backLeftDelta = backLeft - powers[2];
+        double backRightDelta = backRight - powers[3];
 
         double maxDelta = Math.max(Math.max(Math.abs(frontLeftDelta),Math.abs(frontRightDelta)), Math.max(Math.abs(backLeftDelta),Math.abs(backRightDelta)));
 
